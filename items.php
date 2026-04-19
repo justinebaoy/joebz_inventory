@@ -21,6 +21,18 @@ function ensureImageColumnExists(mysqli $conn): void {
 
 ensureImageColumnExists($conn);
 
+function ensureItemActiveColumnExists(mysqli $conn): void {
+    $result = $conn->query("SHOW COLUMNS FROM items LIKE 'is_active'");
+    if ($result && $result->num_rows === 0) {
+        $conn->query("ALTER TABLE items ADD COLUMN is_active TINYINT(1) NOT NULL DEFAULT 1");
+    }
+    if ($result) {
+        $result->free();
+    }
+}
+
+ensureItemActiveColumnExists($conn);
+
 function saveUploadedImage(array $file, ?string &$error): ?string {
     $error = null;
     if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -331,7 +343,18 @@ if (isset($_GET['delete'])) {
     $check_sales->close();
 
     if ($sales_count > 0) {
-        $error = "Cannot delete item that has been sold. Consider deactivating it instead.";
+        $deactivate = $conn->prepare("UPDATE items SET is_active = 0 WHERE item_id = ?");
+        if ($deactivate) {
+            $deactivate->bind_param("i", $item_id);
+            if ($deactivate->execute() && $deactivate->affected_rows > 0) {
+                $success = "Item has sales history, so it was deactivated instead of deleted.";
+            } else {
+                $error = "Item is already inactive or could not be deactivated.";
+            }
+            $deactivate->close();
+        } else {
+            $error = "Cannot deactivate item right now. Please try again.";
+        }
     } else {
         $image_query = $conn->prepare("SELECT image_path FROM items WHERE item_id = ?");
         $image_query->bind_param("i", $item_id);
@@ -369,7 +392,7 @@ if ($categories_result) {
 
 
 // Low stock count
-$q_low_stock = $conn->query("SELECT COUNT(*) AS total FROM items WHERE stock <= 5");
+$q_low_stock = $conn->query("SELECT COUNT(*) AS total FROM items WHERE stock <= 5 AND is_active = 1");
 $low_stock_count = $q_low_stock ? $q_low_stock->fetch_assoc()['total'] : 0;
 
 // ── GET ITEMS WITH PAGINATION ────────────────────────
@@ -390,6 +413,7 @@ if ($search !== '') {
 if ($category_filter > 0) {
     $where_clauses[] = "i.category_id = $category_filter";
 }
+$where_clauses[] = "i.is_active = 1";
 
 $where_sql = !empty($where_clauses) ? 'WHERE ' . implode(' AND ', $where_clauses) : '';
 
@@ -400,7 +424,7 @@ $total_items = $count_result ? $count_result->fetch_assoc()['total'] : 0;
 $total_pages = ceil($total_items / $per_page);
 
 $query = "
-    SELECT i.item_id, i.item_name, i.category_id, i.price, i.stock, i.description, i.image_path, i.created_at,
+    SELECT i.item_id, i.item_name, i.category_id, i.price, i.stock, i.description, i.image_path, i.is_active, i.created_at,
            c.category_name
     FROM items i
     JOIN categories c ON i.category_id = c.category_id
@@ -412,7 +436,7 @@ $query = "
 $items_result = $conn->query($query);
 if ($items_result === false) {
     error_log('Items query failed: ' . $conn->error);
-    $items_result = $conn->query("SELECT i.item_id, i.item_name, i.price, i.stock, i.description, i.image_path, i.created_at, c.category_name FROM items i JOIN categories c ON i.category_id = c.category_id ORDER BY i.created_at DESC LIMIT $per_page OFFSET $offset");
+    $items_result = $conn->query("SELECT i.item_id, i.item_name, i.price, i.stock, i.description, i.image_path, i.is_active, i.created_at, c.category_name FROM items i JOIN categories c ON i.category_id = c.category_id WHERE i.is_active = 1 ORDER BY i.created_at DESC LIMIT $per_page OFFSET $offset");
 }
 if ($items_result === false) {
     $items_result = new class {
@@ -700,13 +724,13 @@ if ($items_result === false) {
                          value="<?= htmlspecialchars($_POST['video_graphics'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                 <div data-spec-field="display">
+                 <div data-spec-field="hard_drive">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Hard Drive</label>
                   <input type="text" name="hard_drive" id="hard-drive"
                          value="<?= htmlspecialchars($_POST['hard_drive'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                 <div data-spec-field="details">
+                 <div data-spec-field="display">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Display</label>
                   <input type="text" name="display" id="display"
                          value="<?= htmlspecialchars($_POST['display'] ?? '') ?>"
@@ -909,27 +933,6 @@ if ($items_result === false) {
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebar-overlay');
 const openSidebarBtn = document.getElementById('open-sidebar');
-const categoryFieldsById = <?= json_encode(array_column($categories, 'allowed_specs', 'category_id'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
-const specFields = document.querySelectorAll('[data-spec-field]');
-
-function applyCategorySpecVisibility() {
-  const categoryId = document.getElementById('category-id').value;
-  const allowedFields = categoryFieldsById[categoryId] || ['product_number', 'details'];
-
-  specFields.forEach((field) => {
-    const key = field.dataset.specField;
-    const input = field.querySelector('input, textarea, select');
-    const isVisible = allowedFields.includes(key);
-    field.classList.toggle('hidden', !isVisible);
-    if (input) {
-      input.disabled = !isVisible;
-      if (!isVisible) {
-        input.value = '';
-      }
-    }
-  });
-}
-
 const categoryNamesById = <?= json_encode(array_column($categories, 'category_name', 'category_id'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
 const specFields = document.querySelectorAll('[data-spec-field]');
 
