@@ -351,8 +351,8 @@ if ($items_result === false) {
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 min-h-screen">
 
 <!-- ── SIDEBAR ── -->
-<div class="flex h-screen overflow-hidden">
-  <aside class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col fixed h-full z-10">
+<div class="flex min-h-screen">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform bg-slate-950 border-r border-slate-800 flex flex-col transition-transform duration-200 ease-out -translate-x-full md:translate-x-0">
 
     <!-- Logo -->
     <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800">
@@ -459,8 +459,20 @@ if ($items_result === false) {
     </div>
   </aside>
 
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 hidden bg-black/60 md:hidden"></div>
+
   <!-- ── MAIN CONTENT ── -->
-  <main class="ml-64 flex-1 overflow-y-auto p-8 bg-slate-950/20">
+  <main class="flex-1 w-full overflow-y-auto p-4 sm:p-6 lg:p-8 md:ml-64 bg-slate-950/20">
+
+    <div class="mb-4 flex items-center justify-between gap-3 md:hidden">
+      <button type="button" id="open-sidebar" class="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-200">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        Menu
+      </button>
+      <a href="logout.php" class="inline-flex items-center gap-2 rounded-xl border border-red-700/50 bg-red-900/20 px-3 py-2 text-sm text-red-200">Logout</a>
+    </div>
 
     <!-- Header -->
     <div class="mb-6">
@@ -502,7 +514,7 @@ if ($items_result === false) {
 
       <!-- ── CREATE/EDIT FORM ── -->
       <div class="lg:col-span-1">
-        <div class="bg-slate-900/95 rounded-3xl border border-slate-800 shadow-2xl shadow-black/20 p-7 sticky top-6">
+        <div class="bg-slate-900/95 rounded-3xl border border-slate-800 shadow-2xl shadow-black/20 p-7 lg:sticky lg:top-6">
 
           <h2 class="text-lg font-bold text-slate-100 mb-4" id="form-title">Add New Item</h2>
 
@@ -605,8 +617,8 @@ if ($items_result === false) {
               <!-- Details -->
               <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Additional Details</label>
-                <textarea name="details" id="item-description" rows="3"
-                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"><?= htmlspecialchars($_POST['details'] ?? '') ?></textarea>
+                <textarea name="details" id="item-description" rows="5"
+                          class="w-full min-h-[140px] px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"><?= htmlspecialchars($_POST['details'] ?? '') ?></textarea>
               </div>
 
               <!-- Buttons -->
@@ -631,13 +643,13 @@ if ($items_result === false) {
         <!-- Filters -->
         <div class="bg-slate-900/95 rounded-2xl border border-slate-800 shadow-xl shadow-black/20 mb-6">
           <div class="p-6">
-            <form method="GET" class="flex flex-wrap gap-4">
-              <div class="flex-1 min-w-64">
+            <form method="GET" class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+              <div class="w-full sm:flex-1 sm:min-w-64">
                 <input type="text" name="search" value="<?= htmlspecialchars($search) ?>"
                        placeholder="Search items..."
                        class="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
               </div>
-              <div class="min-w-48">
+              <div class="w-full sm:min-w-48">
                 <select name="category" class="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="0">All Categories</option>
                   <?php
@@ -650,11 +662,11 @@ if ($items_result === false) {
                 </select>
               </div>
               <button type="submit"
-                      class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-medium transition">
+                      class="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-medium transition">
                 Filter
               </button>
               <a href="items.php"
-                 class="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-slate-300 font-medium transition">
+                 class="w-full text-center sm:w-auto px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-slate-300 font-medium transition">
                 Clear
               </a>
             </form>
@@ -681,7 +693,7 @@ if ($items_result === false) {
             </div>
           </div>
 
-          <div class="p-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div class="p-4 sm:p-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             <?php while ($item = $items_result->fetch_assoc()): ?>
             <article class="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-800 bg-slate-950 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl">
               <div class="relative h-56 bg-slate-900">
@@ -698,14 +710,14 @@ if ($items_result === false) {
                   <div class="mb-3 text-xs uppercase tracking-[0.18em] text-slate-400">Description</div>
                   <?php $specs = parseSpecLines($item['description']); ?>
                   <?php if (!empty($specs)): ?>
-                    <dl class="space-y-2 overflow-y-auto max-h-[18rem] pr-1">
+                    <dl class="space-y-2 pr-1">
                       <?php foreach ($specs as $label => $value): ?>
                         <?php if (is_int($label)): ?>
                           <div class="rounded-xl bg-slate-950/80 px-3 py-2 text-slate-400 break-words">
                             <?= htmlspecialchars($value) ?>
                           </div>
                         <?php else: ?>
-                          <div class="grid gap-3 rounded-xl bg-slate-950/80 px-3 py-2 sm:grid-cols-[140px_minmax(0,1fr)] break-words">
+                          <div class="grid gap-2 rounded-xl bg-slate-950/80 px-3 py-2 md:grid-cols-[140px_minmax(0,1fr)] break-words">
                             <dt class="font-medium text-slate-300 break-words"><?= htmlspecialchars($label) ?></dt>
                             <dd class="text-slate-400 break-words"><?= htmlspecialchars($value) ?></dd>
                           </div>
@@ -795,6 +807,37 @@ if ($items_result === false) {
 </div>
 
 <script>
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const openSidebarBtn = document.getElementById('open-sidebar');
+
+function openSidebar() {
+  if (!sidebar || window.innerWidth >= 768) return;
+  sidebar.classList.remove('-translate-x-full');
+  sidebarOverlay.classList.remove('hidden');
+}
+
+function closeSidebar() {
+  if (!sidebar || window.innerWidth >= 768) return;
+  sidebar.classList.add('-translate-x-full');
+  sidebarOverlay.classList.add('hidden');
+}
+
+if (openSidebarBtn) {
+  openSidebarBtn.addEventListener('click', openSidebar);
+}
+if (sidebarOverlay) {
+  sidebarOverlay.addEventListener('click', closeSidebar);
+}
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 768) {
+    sidebar.classList.remove('-translate-x-full');
+    sidebarOverlay.classList.add('hidden');
+  } else {
+    sidebar.classList.add('-translate-x-full');
+  }
+});
+
 function openEditItem(button) {
   const item = JSON.parse(button.dataset.item);
 
