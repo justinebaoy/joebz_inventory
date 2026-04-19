@@ -108,27 +108,45 @@ function getAllowedSpecKeysByCategory(string $categoryName): array {
         return $allSpecs;
     }
 
-    if (str_contains($normalized, 'ram') || $normalized === 'memory') {
+    if (textContains($normalized, 'ram') || $normalized === 'memory') {
         return ['memory_standard'];
     }
 
-    if (str_contains($normalized, 'laptop')) {
+    if (textContains($normalized, 'laptop')) {
         return ['microprocessor', 'memory_standard', 'video_graphics', 'hard_drive'];
     }
 
-    if (str_contains($normalized, 'storage') || str_contains($normalized, 'ssd') || str_contains($normalized, 'hdd')) {
+    if (textContains($normalized, 'storage') || textContains($normalized, 'ssd') || textContains($normalized, 'hdd')) {
         return ['hard_drive'];
     }
 
-    if (str_contains($normalized, 'gpu') || str_contains($normalized, 'graphics')) {
+    if (textContains($normalized, 'gpu') || textContains($normalized, 'graphics')) {
         return ['video_graphics'];
     }
 
-    if (str_contains($normalized, 'cpu') || str_contains($normalized, 'processor')) {
+    if (textContains($normalized, 'cpu') || textContains($normalized, 'processor')) {
         return ['microprocessor', 'chipset'];
     }
 
     return $allSpecs;
+}
+
+function textContains(string $haystack, string $needle): bool {
+    return $needle !== '' && strpos($haystack, $needle) !== false;
+}
+
+function decodeCategorySpecFields(?string $specFields): array {
+    if ($specFields === null || trim($specFields) === '') {
+        return array_keys(getDefaultSpecValues());
+    }
+
+    $decoded = json_decode($specFields, true);
+    if (!is_array($decoded)) {
+        return array_keys(getDefaultSpecValues());
+    }
+
+    $allowed = array_intersect(array_keys(getDefaultSpecValues()), $decoded);
+    return array_values($allowed);
 }
 
 function buildItemDescription(array $specValues, array $allowedSpecKeys): string {
@@ -345,13 +363,6 @@ $categories = [];
 if ($categories_result) {
     while ($row = $categories_result->fetch_assoc()) {
         $row['allowed_specs'] = decodeCategorySpecFields($row['spec_fields'] ?? null);
-        $categories[] = $row;
-    }
-}
-
-$categories = [];
-if ($categories_result) {
-    while ($row = $categories_result->fetch_assoc()) {
         $categories[] = $row;
     }
 }
