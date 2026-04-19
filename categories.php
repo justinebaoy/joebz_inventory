@@ -165,10 +165,10 @@ $total_cats = $conn->query(
 </head>
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 min-h-screen">
 
-<div class="flex h-screen overflow-hidden">
+<div class="flex min-h-screen">
 
   <!-- ── SIDEBAR ── -->
-  <aside class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col fixed h-full z-10">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform bg-slate-950 border-r border-slate-800 flex flex-col transition-transform duration-200 ease-out -translate-x-full md:translate-x-0">
     <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800">
       <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -275,7 +275,20 @@ $total_cats = $conn->query(
   </aside>
 
   <!-- ── MAIN CONTENT ── -->
-  <main class="ml-64 flex-1 overflow-y-auto p-6">
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 hidden bg-black/60 md:hidden"></div>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="flex-1 w-full overflow-y-auto p-4 sm:p-6 md:ml-64">
+
+    <div class="mb-4 flex items-center justify-between gap-3 md:hidden">
+      <button type="button" id="open-sidebar" class="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-200">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        Menu
+      </button>
+      <a href="logout.php" class="inline-flex items-center gap-2 rounded-xl border border-red-700/50 bg-red-900/20 px-3 py-2 text-sm text-red-200">Logout</a>
+    </div>
 
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
@@ -569,6 +582,38 @@ $total_cats = $conn->query(
 </div>
 
 <script>
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const openSidebarBtn = document.getElementById('open-sidebar');
+
+function openSidebar() {
+  if (!sidebar || window.innerWidth >= 768) return;
+  sidebar.classList.remove('-translate-x-full');
+  sidebarOverlay.classList.remove('hidden');
+}
+
+function closeSidebar() {
+  if (!sidebar || window.innerWidth >= 768) return;
+  sidebar.classList.add('-translate-x-full');
+  sidebarOverlay.classList.add('hidden');
+}
+
+if (openSidebarBtn) {
+  openSidebarBtn.addEventListener('click', openSidebar);
+}
+if (sidebarOverlay) {
+  sidebarOverlay.addEventListener('click', closeSidebar);
+}
+window.addEventListener('resize', () => {
+  if (!sidebar || !sidebarOverlay) return;
+  if (window.innerWidth >= 768) {
+    sidebar.classList.remove('-translate-x-full');
+    sidebarOverlay.classList.add('hidden');
+  } else {
+    sidebar.classList.add('-translate-x-full');
+  }
+});
+
   function openModal(id) {
     document.getElementById(id).classList.remove('hidden');
   }
