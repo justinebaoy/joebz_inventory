@@ -12,8 +12,8 @@ if (!function_exists('renderSidebar')) {
         ?>
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform bg-slate-950 border-r border-slate-800 flex flex-col transition-all duration-200 ease-out -translate-x-full md:translate-x-0">
     <div class="relative flex items-center gap-3 px-6 py-5 border-b border-slate-800">
-      <button type="button" id="sidebar-collapse-toggle" class="hidden md:inline-flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 p-1.5 text-slate-300 hover:text-white hover:bg-slate-800" title="Collapse sidebar">
-        <svg id="collapse-icon" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      <button type="button" id="sidebar-collapse-toggle" class="hidden md:inline-flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 p-1.5 text-slate-300 hover:text-white hover:bg-slate-800" title="Close sidebar">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
       <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shrink-0">
         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/></svg>
@@ -49,6 +49,10 @@ if (!function_exists('renderSidebar')) {
       </a>
     </div>
   </aside>
+  <button type="button" id="sidebar-desktop-open" class="hidden fixed left-4 top-4 z-50 items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-200 shadow-lg shadow-black/30 hover:bg-slate-800" title="Open sidebar">
+    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    Menu
+  </button>
   <div id="sidebar-overlay" class="fixed inset-0 z-30 hidden bg-black/60 md:hidden"></div>
 <?php
     }
