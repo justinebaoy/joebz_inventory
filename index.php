@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — Inventory System</title>
+  <title>Login — POINT-OF-SALE SYSTEM</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 min-h-screen flex items-center justify-center px-4">
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-slate-100">JOEBZ Inventory System</h1>
+      <h1 class="text-2xl font-bold text-slate-100">JOEBZ POINT-OF-SALE SYSTEM</h1>
       <p class="text-slate-400 text-sm mt-1">Sign in to your account</p>
     </div>
 
