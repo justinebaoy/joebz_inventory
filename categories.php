@@ -2,6 +2,45 @@
 session_start();
 require_once 'config/db.php';
 
+const CATEGORY_OPTIONAL_FIELDS = [
+    'microprocessor' => 'Microprocessor',
+    'chipset' => 'Chipset',
+    'memory_standard' => 'Memory',
+    'video_graphics' => 'Video Graphics',
+    'hard_drive' => 'Hard Drive / Storage',
+    'display' => 'Display',
+];
+
+function ensureCategorySpecFieldsColumn(mysqli $conn): void {
+    $result = $conn->query("SHOW COLUMNS FROM categories LIKE 'spec_fields'");
+    if ($result && $result->num_rows === 0) {
+        $conn->query("ALTER TABLE categories ADD COLUMN spec_fields TEXT DEFAULT NULL");
+    }
+    if ($result) {
+        $result->free();
+    }
+}
+
+function sanitizeOptionalFields(array $incomingFields): array {
+    $allowed = array_keys(CATEGORY_OPTIONAL_FIELDS);
+    $sanitized = array_values(array_unique(array_intersect($incomingFields, $allowed)));
+    sort($sanitized);
+    return $sanitized;
+}
+
+function decodeSpecFields(?string $raw): array {
+    if (!$raw) {
+        return [];
+    }
+    $decoded = json_decode($raw, true);
+    if (!is_array($decoded)) {
+        return [];
+    }
+    return sanitizeOptionalFields($decoded);
+}
+
+ensureCategorySpecFieldsColumn($conn);
+
 // Protect page - must be logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -15,6 +54,8 @@ $modal_to_open = '';
 // ── CREATE CATEGORY ────────────────────────────────────
 if (isset($_POST['action']) && $_POST['action'] === 'create') {
     $category_name = trim($_POST['category_name']);
+    $optional_fields = sanitizeOptionalFields($_POST['category_fields'] ?? []);
+    $spec_fields_json = json_encode($optional_fields);
 
     if (empty($category_name)) {
         $error = "Category name is required.";
@@ -34,9 +75,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'create') {
             $error = "Category '{$category_name}' already exists.";
         } else {
             $stmt = $conn->prepare(
-                "INSERT INTO categories (category_name) VALUES (?)"
+                "INSERT INTO categories (category_name, spec_fields) VALUES (?, ?)"
             );
-            $stmt->bind_param("s", $category_name);
+            $stmt->bind_param("ss", $category_name, $spec_fields_json);
             if ($stmt->execute()) {
                 $success = "Category '{$category_name}' created successfully!";
             } else {
@@ -55,6 +96,8 @@ if (isset($_POST['action']) && $_POST['action'] === 'create') {
 if (isset($_POST['action']) && $_POST['action'] === 'edit') {
     $category_id   = (int)$_POST['category_id'];
     $category_name = trim($_POST['category_name']);
+    $optional_fields = sanitizeOptionalFields($_POST['category_fields'] ?? []);
+    $spec_fields_json = json_encode($optional_fields);
 
     if (empty($category_name)) {
         $error = "Category name is required.";
@@ -74,10 +117,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit') {
             $error = "Category '{$category_name}' already exists.";
         } else {
             $stmt = $conn->prepare(
-                "UPDATE categories SET category_name = ?
+                "UPDATE categories SET category_name = ?, spec_fields = ?
                  WHERE category_id = ?"
             );
-            $stmt->bind_param("si", $category_name, $category_id);
+            $stmt->bind_param("ssi", $category_name, $spec_fields_json, $category_id);
             if ($stmt->execute()) {
                 $success = "Category updated successfully!";
             } else {
@@ -128,7 +171,7 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 if ($search !== '') {
     $like = '%' . $search . '%';
     $stmt = $conn->prepare(
-        "SELECT c.category_id, c.category_name, c.created_at,
+        "SELECT c.category_id, c.category_name, c.spec_fields, c.created_at,
                 COUNT(i.item_id) AS item_count
          FROM categories c
          LEFT JOIN items i ON c.category_id = i.category_id
@@ -141,7 +184,7 @@ if ($search !== '') {
     $categories = $stmt->get_result();
 } else {
     $categories = $conn->query(
-        "SELECT c.category_id, c.category_name, c.created_at,
+        "SELECT c.category_id, c.category_name, c.spec_fields, c.created_at,
                 COUNT(i.item_id) AS item_count
          FROM categories c
          LEFT JOIN items i ON c.category_id = i.category_id
@@ -406,7 +449,8 @@ $total_cats = $conn->query(
               <div class="flex items-center gap-1">
                 <button onclick="openEdit(
                            <?= $cat['category_id'] ?>,
-                           '<?= htmlspecialchars($cat['category_name'], ENT_QUOTES) ?>'
+                           '<?= htmlspecialchars($cat['category_name'], ENT_QUOTES) ?>',
+                           '<?= htmlspecialchars(json_encode(decodeSpecFields($cat['spec_fields'] ?? '')), ENT_QUOTES) ?>'
                          )"
                         class="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 transition">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -440,6 +484,15 @@ $total_cats = $conn->query(
                     : 'text-slate-400' ?>">
                 <?= $cat['item_count'] ?>
                 <?= $cat['item_count'] == 1 ? 'item' : 'items' ?>
+              </span>
+            </div>
+            <?php $configured = decodeSpecFields($cat['spec_fields'] ?? ''); ?>
+            <div class="mt-3 text-xs text-slate-400">
+              Optional fields:
+              <span class="text-slate-300">
+                <?= !empty($configured)
+                    ? htmlspecialchars(implode(', ', array_map(fn($key) => CATEGORY_OPTIONAL_FIELDS[$key] ?? $key, $configured)))
+                    : 'None (required fields only)' ?>
               </span>
             </div>
           </div>
@@ -479,6 +532,20 @@ $total_cats = $conn->query(
                       focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                required autofocus>
         <p class="text-xs text-slate-400 mt-1">Maximum 100 characters</p>
+      </div>
+      <div class="mb-5">
+        <p class="block text-sm font-medium text-slate-200 mb-2">Optional Item Fields</p>
+        <p class="text-xs text-slate-400 mb-3">Always required for every item: Item Name, Product Number, Price, Stock, Current Image, and Item Description.</p>
+        <div class="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+          <?php foreach (CATEGORY_OPTIONAL_FIELDS as $fieldKey => $fieldLabel): ?>
+            <label class="flex items-center gap-2 text-sm text-slate-200">
+              <input type="checkbox" name="category_fields[]" value="<?= $fieldKey ?>"
+                     <?= in_array($fieldKey, sanitizeOptionalFields($_POST['category_fields'] ?? []), true) ? 'checked' : '' ?>
+                     class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-blue-600 focus:ring-blue-500">
+              <span><?= htmlspecialchars($fieldLabel) ?></span>
+            </label>
+          <?php endforeach; ?>
+        </div>
       </div>
       <div class="flex gap-3">
         <button type="button" onclick="closeModal('createModal')"
@@ -525,6 +592,22 @@ $total_cats = $conn->query(
                class="w-full border border-slate-700 rounded-xl px-4 py-3 text-sm
                       focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                required>
+      </div>
+      <div class="mb-5">
+        <p class="block text-sm font-medium text-slate-200 mb-2">Optional Item Fields</p>
+        <p class="text-xs text-slate-400 mb-3">Always required for every item: Item Name, Product Number, Price, Stock, Current Image, and Item Description.</p>
+        <div class="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+          <?php $postedFields = sanitizeOptionalFields($_POST['category_fields'] ?? []); ?>
+          <?php foreach (CATEGORY_OPTIONAL_FIELDS as $fieldKey => $fieldLabel): ?>
+            <label class="flex items-center gap-2 text-sm text-slate-200">
+              <input type="checkbox" name="category_fields[]" value="<?= $fieldKey ?>"
+                     data-edit-category-field
+                     <?= in_array($fieldKey, $postedFields, true) ? 'checked' : '' ?>
+                     class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-blue-600 focus:ring-blue-500">
+              <span><?= htmlspecialchars($fieldLabel) ?></span>
+            </label>
+          <?php endforeach; ?>
+        </div>
       </div>
       <div class="flex gap-3">
         <button type="button" onclick="closeModal('editModal')"
@@ -620,9 +703,18 @@ window.addEventListener('resize', () => {
   function closeModal(id) {
     document.getElementById(id).classList.add('hidden');
   }
-  function openEdit(id, name) {
+  function openEdit(id, name, optionalFieldsJson) {
     document.getElementById('edit_category_id').value   = id;
     document.getElementById('edit_category_name').value = name;
+    let optionalFields = [];
+    try {
+      optionalFields = JSON.parse(optionalFieldsJson || '[]');
+    } catch (e) {
+      optionalFields = [];
+    }
+    document.querySelectorAll('[data-edit-category-field]').forEach((checkbox) => {
+      checkbox.checked = optionalFields.includes(checkbox.value);
+    });
     openModal('editModal');
   }
   function confirmDelete(id, name) {

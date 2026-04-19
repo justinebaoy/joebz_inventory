@@ -87,20 +87,88 @@ function parseSpecLines(string $text): array {
     return $specs;
 }
 
+function getDefaultSpecValues(): array {
+    return [
+        'product_number' => '',
+        'microprocessor' => '',
+        'chipset' => '',
+        'memory_standard' => '',
+        'video_graphics' => '',
+        'hard_drive' => '',
+        'display' => '',
+        'details' => '',
+    ];
+}
+
+function getAllowedSpecKeysByCategory(string $categoryName): array {
+    $normalized = strtolower(trim($categoryName));
+    $allSpecs = array_keys(getDefaultSpecValues());
+
+    if ($normalized === '') {
+        return $allSpecs;
+    }
+
+    if (str_contains($normalized, 'ram') || $normalized === 'memory') {
+        return ['memory_standard'];
+    }
+
+    if (str_contains($normalized, 'laptop')) {
+        return ['microprocessor', 'memory_standard', 'video_graphics', 'hard_drive'];
+    }
+
+    if (str_contains($normalized, 'storage') || str_contains($normalized, 'ssd') || str_contains($normalized, 'hdd')) {
+        return ['hard_drive'];
+    }
+
+    if (str_contains($normalized, 'gpu') || str_contains($normalized, 'graphics')) {
+        return ['video_graphics'];
+    }
+
+    if (str_contains($normalized, 'cpu') || str_contains($normalized, 'processor')) {
+        return ['microprocessor', 'chipset'];
+    }
+
+    return $allSpecs;
+}
+
+function buildItemDescription(array $specValues, array $allowedSpecKeys): string {
+    $lines = [];
+
+    $labels = [
+        'product_number' => 'Product number',
+        'microprocessor' => 'Microprocessor',
+        'chipset' => 'Chipset',
+        'memory_standard' => 'Memory, standard',
+        'video_graphics' => 'Video graphics',
+        'hard_drive' => 'Hard drive',
+        'display' => 'Display',
+        'details' => 'Details',
+    ];
+
+    foreach ($labels as $key => $label) {
+        if (!in_array($key, $allowedSpecKeys, true)) {
+            continue;
+        }
+        $value = trim((string)($specValues[$key] ?? ''));
+        if ($value !== '') {
+            $lines[] = "{$label}: {$value}";
+        }
+    }
+
+    return implode("\n", $lines);
+}
+
 // ── CREATE ITEM ──────────────────────────────────────
 if (isset($_POST['action']) && $_POST['action'] === 'create') {
     $item_name = trim($_POST['item_name']);
     $category_id = (int)$_POST['category_id'];
     $price = (float)$_POST['price'];
     $stock = (int)$_POST['stock'];
-    $product_number = trim($_POST['product_number'] ?? '');
-    $microprocessor = trim($_POST['microprocessor'] ?? '');
-    $chipset = trim($_POST['chipset'] ?? '');
-    $memory_standard = trim($_POST['memory_standard'] ?? '');
-    $video_graphics = trim($_POST['video_graphics'] ?? '');
-    $hard_drive = trim($_POST['hard_drive'] ?? '');
-    $display = trim($_POST['display'] ?? '');
-    $details = trim($_POST['details'] ?? '');
+    $specValues = getDefaultSpecValues();
+    foreach ($specValues as $key => $value) {
+      $specValues[$key] = trim($_POST[$key] ?? '');
+    }
+
     $image_path = null;
 
     if (isset($_FILES['image'])) {
@@ -110,16 +178,19 @@ if (isset($_POST['action']) && $_POST['action'] === 'create') {
         }
     }
 
-    $description = implode("\n", array_filter([
-        $product_number !== '' ? "Product number: $product_number" : null,
-        $microprocessor !== '' ? "Microprocessor: $microprocessor" : null,
-        $chipset !== '' ? "Chipset: $chipset" : null,
-        $memory_standard !== '' ? "Memory, standard: $memory_standard" : null,
-        $video_graphics !== '' ? "Video graphics: $video_graphics" : null,
-        $hard_drive !== '' ? "Hard drive: $hard_drive" : null,
-        $display !== '' ? "Display: $display" : null,
-        $details !== '' ? "Details: $details" : null,
-    ]));
+    $categoryName = '';
+    if ($category_id > 0) {
+        $categoryStmt = $conn->prepare("SELECT category_name FROM categories WHERE category_id = ?");
+        if ($categoryStmt) {
+            $categoryStmt->bind_param("i", $category_id);
+            $categoryStmt->execute();
+            $categoryName = $categoryStmt->get_result()->fetch_assoc()['category_name'] ?? '';
+            $categoryStmt->close();
+        }
+    }
+    $allowedSpecKeys = getAllowedSpecKeysByCategory($categoryName);
+    $description = buildItemDescription($specValues, $allowedSpecKeys);
+
 
     if (empty($item_name) || $price <= 0 || $stock < 0) {
         $error = "Please fill in all required fields with valid values.";
@@ -160,14 +231,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit') {
     $category_id = (int)$_POST['category_id'];
     $price = (float)$_POST['price'];
     $stock = (int)$_POST['stock'];
-    $product_number = trim($_POST['product_number'] ?? '');
-    $microprocessor = trim($_POST['microprocessor'] ?? '');
-    $chipset = trim($_POST['chipset'] ?? '');
-    $memory_standard = trim($_POST['memory_standard'] ?? '');
-    $video_graphics = trim($_POST['video_graphics'] ?? '');
-    $hard_drive = trim($_POST['hard_drive'] ?? '');
-    $display = trim($_POST['display'] ?? '');
-    $details = trim($_POST['details'] ?? '');
+    $specValues = getDefaultSpecValues();
+    foreach ($specValues as $key => $value) {
+        $specValues[$key] = trim($_POST[$key] ?? '');
+    }
+
     $current_image = trim($_POST['current_image'] ?? '');
     $image_path = $current_image;
 
@@ -186,16 +254,19 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit') {
         }
     }
 
-    $description = implode("\n", array_filter([
-        $product_number !== '' ? "Product number: $product_number" : null,
-        $microprocessor !== '' ? "Microprocessor: $microprocessor" : null,
-        $chipset !== '' ? "Chipset: $chipset" : null,
-        $memory_standard !== '' ? "Memory, standard: $memory_standard" : null,
-        $video_graphics !== '' ? "Video graphics: $video_graphics" : null,
-        $hard_drive !== '' ? "Hard drive: $hard_drive" : null,
-        $display !== '' ? "Display: $display" : null,
-        $details !== '' ? "Details: $details" : null,
-    ]));
+     $categoryName = '';
+    if ($category_id > 0) {
+        $categoryStmt = $conn->prepare("SELECT category_name FROM categories WHERE category_id = ?");
+        if ($categoryStmt) {
+            $categoryStmt->bind_param("i", $category_id);
+            $categoryStmt->execute();
+            $categoryName = $categoryStmt->get_result()->fetch_assoc()['category_name'] ?? '';
+            $categoryStmt->close();
+        }
+    }
+    $allowedSpecKeys = getAllowedSpecKeysByCategory($categoryName);
+    $description = buildItemDescription($specValues, $allowedSpecKeys);
+
 
     if (empty($item_name) || $price <= 0 || $stock < 0) {
         $error = "Please fill in all required fields with valid values.";
@@ -269,7 +340,22 @@ if (isset($_GET['delete'])) {
 }
 
 // ── GET CATEGORIES FOR DROPDOWN ──────────────────────
-$categories_result = $conn->query("SELECT category_id, category_name FROM categories ORDER BY category_name");
+$categories_result = $conn->query("SELECT category_id, category_name, spec_fields FROM categories ORDER BY category_name");
+$categories = [];
+if ($categories_result) {
+    while ($row = $categories_result->fetch_assoc()) {
+        $row['allowed_specs'] = decodeCategorySpecFields($row['spec_fields'] ?? null);
+        $categories[] = $row;
+    }
+}
+
+$categories = [];
+if ($categories_result) {
+    while ($row = $categories_result->fetch_assoc()) {
+        $categories[] = $row;
+    }
+}
+
 
 // Low stock count
 $q_low_stock = $conn->query("SELECT COUNT(*) AS total FROM items WHERE stock <= 5");
@@ -537,11 +623,12 @@ if ($items_result === false) {
                 <select name="category_id" id="category-id" required
                         class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="">Select Category</option>
-                  <?php
-                  $categories_result->data_seek(0); // Reset pointer
-                  while ($cat = $categories_result->fetch_assoc()): ?>
-                    <option value="<?= $cat['category_id'] ?>"><?= htmlspecialchars($cat['category_name']) ?></option>
-                  <?php endwhile; ?>
+                 <?php foreach ($categories as $cat): ?>
+                    <option value="<?= $cat['category_id'] ?>" <?= (int)($cat['category_id']) === (int)($_POST['category_id'] ?? 0) ? 'selected' : '' ?>>
+                      <?= htmlspecialchars($cat['category_name']) ?>
+                    </option>
+                  <?php endforeach; ?>
+
                 </select>
               </div>
 
@@ -564,49 +651,51 @@ if ($items_result === false) {
               <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Product Image</label>
                 <input type="file" name="image" id="item-image" accept="image/*"
+                       required
                        class="w-full text-slate-100 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white bg-slate-800 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <input type="hidden" name="current_image" id="current-image" value="">
               </div>
 
               <!-- Specs -->
               <div class="grid gap-4">
-                <div>
+                 <div data-spec-field="product_number">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Product Number</label>
                   <input type="text" name="product_number" id="product-number"
+                         required
                          value="<?= htmlspecialchars($_POST['product_number'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div>
+                <div data-spec-field="microprocessor">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Microprocessor</label>
                   <input type="text" name="microprocessor" id="microprocessor"
                          value="<?= htmlspecialchars($_POST['microprocessor'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div>
+                <div data-spec-field="chipset">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Chipset</label>
                   <input type="text" name="chipset" id="chipset"
                          value="<?= htmlspecialchars($_POST['chipset'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div>
+                <div data-spec-field="memory_standard">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Memory</label>
                   <input type="text" name="memory_standard" id="memory-standard"
                          value="<?= htmlspecialchars($_POST['memory_standard'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div>
+                <div data-spec-field="video_graphics">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Video Graphics</label>
                   <input type="text" name="video_graphics" id="video-graphics"
                          value="<?= htmlspecialchars($_POST['video_graphics'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div>
+                 <div data-spec-field="display">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Hard Drive</label>
                   <input type="text" name="hard_drive" id="hard-drive"
                          value="<?= htmlspecialchars($_POST['hard_drive'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div>
+                 <div data-spec-field="details">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Display</label>
                   <input type="text" name="display" id="display"
                          value="<?= htmlspecialchars($_POST['display'] ?? '') ?>"
@@ -615,9 +704,10 @@ if ($items_result === false) {
               </div>
 
               <!-- Details -->
-              <div>
+              <div data-spec-field="details">
                 <label class="block text-sm font-medium text-slate-300 mb-1">Additional Details</label>
                 <textarea name="details" id="item-description" rows="5"
+                          required
                           class="w-full min-h-[140px] px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"><?= htmlspecialchars($_POST['details'] ?? '') ?></textarea>
               </div>
 
@@ -652,13 +742,11 @@ if ($items_result === false) {
               <div class="w-full sm:min-w-48">
                 <select name="category" class="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="0">All Categories</option>
-                  <?php
-                  $categories_result->data_seek(0); // Reset pointer
-                  while ($cat = $categories_result->fetch_assoc()): ?>
+                <?php foreach ($categories as $cat): ?>
                     <option value="<?= $cat['category_id'] ?>" <?= $category_filter == $cat['category_id'] ? 'selected' : '' ?>>
                       <?= htmlspecialchars($cat['category_name']) ?>
                     </option>
-                  <?php endwhile; ?>
+                  <?php endforeach; ?>
                 </select>
               </div>
               <button type="submit"
@@ -810,6 +898,64 @@ if ($items_result === false) {
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebar-overlay');
 const openSidebarBtn = document.getElementById('open-sidebar');
+const categoryFieldsById = <?= json_encode(array_column($categories, 'allowed_specs', 'category_id'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+const specFields = document.querySelectorAll('[data-spec-field]');
+
+function applyCategorySpecVisibility() {
+  const categoryId = document.getElementById('category-id').value;
+  const allowedFields = categoryFieldsById[categoryId] || ['product_number', 'details'];
+
+  specFields.forEach((field) => {
+    const key = field.dataset.specField;
+    const input = field.querySelector('input, textarea, select');
+    const isVisible = allowedFields.includes(key);
+    field.classList.toggle('hidden', !isVisible);
+    if (input) {
+      input.disabled = !isVisible;
+      if (!isVisible) {
+        input.value = '';
+      }
+    }
+  });
+}
+
+const categoryNamesById = <?= json_encode(array_column($categories, 'category_name', 'category_id'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+const specFields = document.querySelectorAll('[data-spec-field]');
+
+function getAllowedSpecFields(categoryName) {
+  const normalized = (categoryName || '').trim().toLowerCase();
+  const allFields = ['product_number', 'microprocessor', 'chipset', 'memory_standard', 'video_graphics', 'hard_drive', 'display', 'details'];
+
+  if (!normalized) return allFields;
+  if (normalized.includes('ram') || normalized === 'memory') return ['memory_standard'];
+  if (normalized.includes('laptop')) return ['microprocessor', 'memory_standard', 'video_graphics', 'hard_drive'];
+  if (normalized.includes('storage') || normalized.includes('ssd') || normalized.includes('hdd')) return ['hard_drive'];
+  if (normalized.includes('gpu') || normalized.includes('graphics')) return ['video_graphics'];
+  if (normalized.includes('cpu') || normalized.includes('processor')) return ['microprocessor', 'chipset'];
+
+  return allFields;
+}
+
+function applyCategorySpecVisibility() {
+  const categoryId = document.getElementById('category-id').value;
+  const categoryName = categoryNamesById[categoryId] || '';
+  const allowedFields = getAllowedSpecFields(categoryName);
+
+  specFields.forEach((field) => {
+    const key = field.dataset.specField;
+    const input = field.querySelector('input, textarea, select');
+    const isVisible = allowedFields.includes(key);
+    field.classList.toggle('hidden', !isVisible);
+    if (input) {
+      input.disabled = !isVisible;
+      if (!isVisible) {
+        input.value = '';
+      }
+    }
+  });
+}
+
+
 
 function openSidebar() {
   if (!sidebar || window.innerWidth >= 768) return;
@@ -838,6 +984,9 @@ window.addEventListener('resize', () => {
   }
 });
 
+document.getElementById('category-id').addEventListener('change', applyCategorySpecVisibility);
+
+
 function openEditItem(button) {
   const item = JSON.parse(button.dataset.item);
 
@@ -849,6 +998,7 @@ function openEditItem(button) {
   document.getElementById('item-price').value = item.price;
   document.getElementById('item-stock').value = item.stock;
   document.getElementById('current-image').value = item.image || '';
+  document.getElementById('item-image').required = !(item.image && item.image.trim() !== '');
   document.getElementById('product-number').value = item.product_number;
   document.getElementById('microprocessor').value = item.microprocessor;
   document.getElementById('chipset').value = item.chipset;
@@ -858,6 +1008,7 @@ function openEditItem(button) {
   document.getElementById('display').value = item.display;
   document.getElementById('item-description').value = item.details;
   document.getElementById('submit-text').textContent = 'Update Item';
+  applyCategorySpecVisibility();
 
   // Scroll to form
   document.querySelector('.lg\\:col-span-1').scrollIntoView({ behavior: 'smooth' });
@@ -879,9 +1030,12 @@ function resetForm() {
   document.getElementById('hard-drive').value = '';
   document.getElementById('display').value = '';
   document.getElementById('current-image').value = '';
+  document.getElementById('item-image').required = true;
   document.getElementById('item-description').value = '';
   document.getElementById('submit-text').textContent = 'Add Item';
+  applyCategorySpecVisibility();
 }
+applyCategorySpecVisibility();
 </script>
 
 </body>
