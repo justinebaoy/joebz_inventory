@@ -340,7 +340,14 @@ if (isset($_GET['delete'])) {
 }
 
 // ── GET CATEGORIES FOR DROPDOWN ──────────────────────
-$categories_result = $conn->query("SELECT category_id, category_name FROM categories ORDER BY category_name");
+$categories_result = $conn->query("SELECT category_id, category_name, spec_fields FROM categories ORDER BY category_name");
+$categories = [];
+if ($categories_result) {
+    while ($row = $categories_result->fetch_assoc()) {
+        $row['allowed_specs'] = decodeCategorySpecFields($row['spec_fields'] ?? null);
+        $categories[] = $row;
+    }
+}
 
 $categories = [];
 if ($categories_result) {
@@ -644,6 +651,7 @@ if ($items_result === false) {
               <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Product Image</label>
                 <input type="file" name="image" id="item-image" accept="image/*"
+                       required
                        class="w-full text-slate-100 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white bg-slate-800 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <input type="hidden" name="current_image" id="current-image" value="">
               </div>
@@ -653,6 +661,7 @@ if ($items_result === false) {
                  <div data-spec-field="product_number">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Product Number</label>
                   <input type="text" name="product_number" id="product-number"
+                         required
                          value="<?= htmlspecialchars($_POST['product_number'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
@@ -695,9 +704,10 @@ if ($items_result === false) {
               </div>
 
               <!-- Details -->
-              <div>
+              <div data-spec-field="details">
                 <label class="block text-sm font-medium text-slate-300 mb-1">Additional Details</label>
                 <textarea name="details" id="item-description" rows="5"
+                          required
                           class="w-full min-h-[140px] px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"><?= htmlspecialchars($_POST['details'] ?? '') ?></textarea>
               </div>
 
@@ -888,6 +898,26 @@ if ($items_result === false) {
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebar-overlay');
 const openSidebarBtn = document.getElementById('open-sidebar');
+const categoryFieldsById = <?= json_encode(array_column($categories, 'allowed_specs', 'category_id'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+const specFields = document.querySelectorAll('[data-spec-field]');
+
+function applyCategorySpecVisibility() {
+  const categoryId = document.getElementById('category-id').value;
+  const allowedFields = categoryFieldsById[categoryId] || ['product_number', 'details'];
+
+  specFields.forEach((field) => {
+    const key = field.dataset.specField;
+    const input = field.querySelector('input, textarea, select');
+    const isVisible = allowedFields.includes(key);
+    field.classList.toggle('hidden', !isVisible);
+    if (input) {
+      input.disabled = !isVisible;
+      if (!isVisible) {
+        input.value = '';
+      }
+    }
+  });
+}
 
 const categoryNamesById = <?= json_encode(array_column($categories, 'category_name', 'category_id'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
 const specFields = document.querySelectorAll('[data-spec-field]');
@@ -968,6 +998,7 @@ function openEditItem(button) {
   document.getElementById('item-price').value = item.price;
   document.getElementById('item-stock').value = item.stock;
   document.getElementById('current-image').value = item.image || '';
+  document.getElementById('item-image').required = !(item.image && item.image.trim() !== '');
   document.getElementById('product-number').value = item.product_number;
   document.getElementById('microprocessor').value = item.microprocessor;
   document.getElementById('chipset').value = item.chipset;
@@ -999,6 +1030,7 @@ function resetForm() {
   document.getElementById('hard-drive').value = '';
   document.getElementById('display').value = '';
   document.getElementById('current-image').value = '';
+  document.getElementById('item-image').required = true;
   document.getElementById('item-description').value = '';
   document.getElementById('submit-text').textContent = 'Add Item';
   applyCategorySpecVisibility();
