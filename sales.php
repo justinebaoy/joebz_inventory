@@ -27,8 +27,20 @@ if (isset($_POST['action']) && $_POST['action'] === 'add_to_cart') {
 
         if ($result->num_rows === 1) {
             $item = $result->fetch_assoc();
+            $current_cart_qty = 0;
 
-            if ($item['stock'] < $quantity) {
+            if (isset($_SESSION['cart'])) {
+                foreach ($_SESSION['cart'] as $cart_item) {
+                    if ((int)$cart_item['item_id'] === $item_id) {
+                        $current_cart_qty = (int)$cart_item['quantity'];
+                        break;
+                    }
+                }
+            }
+
+            $requested_total_qty = $current_cart_qty + $quantity;
+
+            if ($item['stock'] < $requested_total_qty) {
                 $error = "Insufficient stock. Only {$item['stock']} available.";
             } else {
                 // Initialize cart if not exists
@@ -113,6 +125,22 @@ if (isset($_POST['action']) && $_POST['action'] === 'process_sale') {
 
                 // Insert sale items and update stock
                 foreach ($_SESSION['cart'] as $item) {
+                    $stock_check = $conn->prepare("SELECT stock FROM items WHERE item_id = ? FOR UPDATE");
+                    $stock_check->bind_param("i", $item['item_id']);
+                    $stock_check->execute();
+                    $stock_result = $stock_check->get_result();
+
+                    if ($stock_result->num_rows !== 1) {
+                        throw new Exception('Item no longer exists.');
+                    }
+
+                    $available_stock = (int)$stock_result->fetch_assoc()['stock'];
+                    $stock_check->close();
+
+                    if ($available_stock < (int)$item['quantity']) {
+                        throw new Exception('Insufficient stock while processing sale.');
+                    }
+
                     // Insert sale item (assuming sale_items table exists)
                     $stmt = $conn->prepare("INSERT INTO sale_items (sale_id, item_id, quantity, price) VALUES (?, ?, ?, ?)");
                     $stmt->bind_param("iiid", $sale_id, $item['item_id'], $item['quantity'], $item['price']);
@@ -120,9 +148,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'process_sale') {
                     $stmt->close();
 
                     // Update stock
-                    $stmt = $conn->prepare("UPDATE items SET stock = stock - ? WHERE item_id = ?");
-                    $stmt->bind_param("ii", $item['quantity'], $item['item_id']);
+                    $stmt = $conn->prepare("UPDATE items SET stock = stock - ? WHERE item_id = ? AND stock >= ?");
+                    $stmt->bind_param("iii", $item['quantity'], $item['item_id'], $item['quantity']);
                     $stmt->execute();
+                    if ($stmt->affected_rows !== 1) {
+                        $stmt->close();
+                        throw new Exception('Stock update failed.');
+                    }
                     $stmt->close();
                 }
 
