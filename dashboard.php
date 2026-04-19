@@ -126,7 +126,7 @@ for ($i = 6; $i >= 0; $i--) {
       </div>
       <div>
         <p class="text-sm font-bold text-slate-100">JOEBZ</p>
-        <p class="text-xs text-slate-400">Inventory System</p>
+        <p class="text-xs text-slate-400">POINT-OF-SALE SYSTEM</p>
       </div>
     </div>
 

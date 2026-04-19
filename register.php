@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </svg>
       </div>
       <h1 class="text-2xl font-bold text-slate-100">Create Account</h1>
-      <p class="text-slate-400 text-sm mt-1">Register to access the inventory system</p>
+      <p class="text-slate-400 text-sm mt-1">Register to access the POINT-OF-SALE SYSTEM</p>
     </div>
 
     <!-- Card -->

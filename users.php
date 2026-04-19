@@ -199,7 +199,7 @@ if ($search !== '') {
       </div>
       <div>
         <p class="text-sm font-bold text-slate-100">JOEBZ</p>
-        <p class="text-xs text-slate-400">Inventory System</p>
+        <p class="text-xs text-slate-400">POINT-OF-SALE SYSTEM</p>
       </div>
     </div>
     <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
@@ -318,10 +318,10 @@ if ($search !== '') {
           </div>
           <input type="text" name="search" placeholder="Search users by name, username, or email..."
                  value="<?= htmlspecialchars($search) ?>"
-                 class="w-full pl-10 pr-4 py-3 border border-slate-700 rounded-xl text-sm
-                        focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                 class="w-full pl-10 pr-4 py-3 border border-slate-700 rounded-xl bg-slate-900/95 text-slate-100 placeholder-slate-500 text-sm
+                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
           <button type="submit"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-500 hover:text-blue-700">
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-blue-400 transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>

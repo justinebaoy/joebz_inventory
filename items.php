@@ -100,24 +100,35 @@ function getDefaultSpecValues(): array {
     ];
 }
 
-function getRequiredSpecKeys(): array {
-    return ['product_number', 'details'];
-}
+function getAllowedSpecKeysByCategory(string $categoryName): array {
+    $normalized = strtolower(trim($categoryName));
+    $allSpecs = array_keys(getDefaultSpecValues());
 
-function decodeCategorySpecFields(?string $raw): array {
-    $allowed = array_keys(getDefaultSpecValues());
-    $required = getRequiredSpecKeys();
-
-    if (!$raw) {
-        return $required;
-    }
-    $decoded = json_decode($raw, true);
-    if (!is_array($decoded)) {
-        return $required;
+    if ($normalized === '') {
+        return $allSpecs;
     }
 
-    $valid = array_values(array_unique(array_intersect($decoded, $allowed)));
-    return array_values(array_unique(array_merge($required, $valid)));
+    if (str_contains($normalized, 'ram') || $normalized === 'memory') {
+        return ['memory_standard'];
+    }
+
+    if (str_contains($normalized, 'laptop')) {
+        return ['microprocessor', 'memory_standard', 'video_graphics', 'hard_drive'];
+    }
+
+    if (str_contains($normalized, 'storage') || str_contains($normalized, 'ssd') || str_contains($normalized, 'hdd')) {
+        return ['hard_drive'];
+    }
+
+    if (str_contains($normalized, 'gpu') || str_contains($normalized, 'graphics')) {
+        return ['video_graphics'];
+    }
+
+    if (str_contains($normalized, 'cpu') || str_contains($normalized, 'processor')) {
+        return ['microprocessor', 'chipset'];
+    }
+
+    return $allSpecs;
 }
 
 function buildItemDescription(array $specValues, array $allowedSpecKeys): string {
@@ -155,8 +166,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'create') {
     $stock = (int)$_POST['stock'];
     $specValues = getDefaultSpecValues();
     foreach ($specValues as $key => $value) {
-        $specValues[$key] = trim($_POST[$key] ?? '');
+      $specValues[$key] = trim($_POST[$key] ?? '');
     }
+
     $image_path = null;
 
     if (isset($_FILES['image'])) {
@@ -166,23 +178,22 @@ if (isset($_POST['action']) && $_POST['action'] === 'create') {
         }
     }
 
-    $categorySpecFieldsRaw = null;
+    $categoryName = '';
     if ($category_id > 0) {
-        $categoryStmt = $conn->prepare("SELECT spec_fields FROM categories WHERE category_id = ?");
+        $categoryStmt = $conn->prepare("SELECT category_name FROM categories WHERE category_id = ?");
         if ($categoryStmt) {
             $categoryStmt->bind_param("i", $category_id);
             $categoryStmt->execute();
-            $categorySpecFieldsRaw = $categoryStmt->get_result()->fetch_assoc()['spec_fields'] ?? null;
+            $categoryName = $categoryStmt->get_result()->fetch_assoc()['category_name'] ?? '';
             $categoryStmt->close();
         }
     }
-    $allowedSpecKeys = decodeCategorySpecFields($categorySpecFieldsRaw);
+    $allowedSpecKeys = getAllowedSpecKeysByCategory($categoryName);
     $description = buildItemDescription($specValues, $allowedSpecKeys);
 
-    if (empty($item_name) || $price <= 0 || $stock < 0 || trim($specValues['product_number']) === '' || trim($specValues['details']) === '') {
-        $error = "Please fill in all required fields with valid values (including Product Number and Item Description).";
-    } elseif ($image_path === null) {
-        $error = "Current Image is required for new items.";
+
+    if (empty($item_name) || $price <= 0 || $stock < 0) {
+        $error = "Please fill in all required fields with valid values.";
     } elseif (empty($error)) {
         // Check if item name already exists
         $check = $conn->prepare("SELECT item_id FROM items WHERE item_name = ?");
@@ -224,6 +235,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit') {
     foreach ($specValues as $key => $value) {
         $specValues[$key] = trim($_POST[$key] ?? '');
     }
+
     $current_image = trim($_POST['current_image'] ?? '');
     $image_path = $current_image;
 
@@ -242,23 +254,22 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit') {
         }
     }
 
-    $categorySpecFieldsRaw = null;
+     $categoryName = '';
     if ($category_id > 0) {
-        $categoryStmt = $conn->prepare("SELECT spec_fields FROM categories WHERE category_id = ?");
+        $categoryStmt = $conn->prepare("SELECT category_name FROM categories WHERE category_id = ?");
         if ($categoryStmt) {
             $categoryStmt->bind_param("i", $category_id);
             $categoryStmt->execute();
-            $categorySpecFieldsRaw = $categoryStmt->get_result()->fetch_assoc()['spec_fields'] ?? null;
+            $categoryName = $categoryStmt->get_result()->fetch_assoc()['category_name'] ?? '';
             $categoryStmt->close();
         }
     }
-    $allowedSpecKeys = decodeCategorySpecFields($categorySpecFieldsRaw);
+    $allowedSpecKeys = getAllowedSpecKeysByCategory($categoryName);
     $description = buildItemDescription($specValues, $allowedSpecKeys);
 
-    if (empty($item_name) || $price <= 0 || $stock < 0 || trim($specValues['product_number']) === '' || trim($specValues['details']) === '') {
-        $error = "Please fill in all required fields with valid values (including Product Number and Item Description).";
-    } elseif ($image_path === null || trim($image_path) === '') {
-        $error = "Current Image is required for every item.";
+
+    if (empty($item_name) || $price <= 0 || $stock < 0) {
+        $error = "Please fill in all required fields with valid values.";
     } elseif (empty($error)) {
         // Check if name conflicts with other items
         $check = $conn->prepare("SELECT item_id FROM items WHERE item_name = ? AND item_id != ?");
@@ -337,6 +348,14 @@ if ($categories_result) {
         $categories[] = $row;
     }
 }
+
+$categories = [];
+if ($categories_result) {
+    while ($row = $categories_result->fetch_assoc()) {
+        $categories[] = $row;
+    }
+}
+
 
 // Low stock count
 $q_low_stock = $conn->query("SELECT COUNT(*) AS total FROM items WHERE stock <= 5");
@@ -431,7 +450,7 @@ if ($items_result === false) {
       </div>
       <div>
         <p class="text-sm font-bold text-slate-100">JOEBZ</p>
-        <p class="text-xs text-slate-400">Inventory System</p>
+        <p class="text-xs text-slate-400">POINT-OF-SALE SYSTEM</p>
       </div>
     </div>
 
@@ -604,11 +623,12 @@ if ($items_result === false) {
                 <select name="category_id" id="category-id" required
                         class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="">Select Category</option>
-                  <?php foreach ($categories as $cat): ?>
+                 <?php foreach ($categories as $cat): ?>
                     <option value="<?= $cat['category_id'] ?>" <?= (int)($cat['category_id']) === (int)($_POST['category_id'] ?? 0) ? 'selected' : '' ?>>
                       <?= htmlspecialchars($cat['category_name']) ?>
                     </option>
                   <?php endforeach; ?>
+
                 </select>
               </div>
 
@@ -638,7 +658,7 @@ if ($items_result === false) {
 
               <!-- Specs -->
               <div class="grid gap-4">
-                <div data-spec-field="product_number">
+                 <div data-spec-field="product_number">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Product Number</label>
                   <input type="text" name="product_number" id="product-number"
                          required
@@ -669,13 +689,13 @@ if ($items_result === false) {
                          value="<?= htmlspecialchars($_POST['video_graphics'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div data-spec-field="hard_drive">
+                 <div data-spec-field="display">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Hard Drive</label>
                   <input type="text" name="hard_drive" id="hard-drive"
                          value="<?= htmlspecialchars($_POST['hard_drive'] ?? '') ?>"
                          class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div data-spec-field="display">
+                 <div data-spec-field="details">
                   <label class="block text-sm font-medium text-slate-300 mb-1">Display</label>
                   <input type="text" name="display" id="display"
                          value="<?= htmlspecialchars($_POST['display'] ?? '') ?>"
@@ -722,7 +742,7 @@ if ($items_result === false) {
               <div class="w-full sm:min-w-48">
                 <select name="category" class="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="0">All Categories</option>
-                  <?php foreach ($categories as $cat): ?>
+                <?php foreach ($categories as $cat): ?>
                     <option value="<?= $cat['category_id'] ?>" <?= $category_filter == $cat['category_id'] ? 'selected' : '' ?>>
                       <?= htmlspecialchars($cat['category_name']) ?>
                     </option>
@@ -899,6 +919,44 @@ function applyCategorySpecVisibility() {
   });
 }
 
+const categoryNamesById = <?= json_encode(array_column($categories, 'category_name', 'category_id'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+const specFields = document.querySelectorAll('[data-spec-field]');
+
+function getAllowedSpecFields(categoryName) {
+  const normalized = (categoryName || '').trim().toLowerCase();
+  const allFields = ['product_number', 'microprocessor', 'chipset', 'memory_standard', 'video_graphics', 'hard_drive', 'display', 'details'];
+
+  if (!normalized) return allFields;
+  if (normalized.includes('ram') || normalized === 'memory') return ['memory_standard'];
+  if (normalized.includes('laptop')) return ['microprocessor', 'memory_standard', 'video_graphics', 'hard_drive'];
+  if (normalized.includes('storage') || normalized.includes('ssd') || normalized.includes('hdd')) return ['hard_drive'];
+  if (normalized.includes('gpu') || normalized.includes('graphics')) return ['video_graphics'];
+  if (normalized.includes('cpu') || normalized.includes('processor')) return ['microprocessor', 'chipset'];
+
+  return allFields;
+}
+
+function applyCategorySpecVisibility() {
+  const categoryId = document.getElementById('category-id').value;
+  const categoryName = categoryNamesById[categoryId] || '';
+  const allowedFields = getAllowedSpecFields(categoryName);
+
+  specFields.forEach((field) => {
+    const key = field.dataset.specField;
+    const input = field.querySelector('input, textarea, select');
+    const isVisible = allowedFields.includes(key);
+    field.classList.toggle('hidden', !isVisible);
+    if (input) {
+      input.disabled = !isVisible;
+      if (!isVisible) {
+        input.value = '';
+      }
+    }
+  });
+}
+
+
+
 function openSidebar() {
   if (!sidebar || window.innerWidth >= 768) return;
   sidebar.classList.remove('-translate-x-full');
@@ -927,6 +985,7 @@ window.addEventListener('resize', () => {
 });
 
 document.getElementById('category-id').addEventListener('change', applyCategorySpecVisibility);
+
 
 function openEditItem(button) {
   const item = JSON.parse(button.dataset.item);
@@ -976,7 +1035,6 @@ function resetForm() {
   document.getElementById('submit-text').textContent = 'Add Item';
   applyCategorySpecVisibility();
 }
-
 applyCategorySpecVisibility();
 </script>
 
