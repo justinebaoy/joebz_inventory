@@ -2,6 +2,18 @@
 session_start();
 require_once 'config/db.php';
 
+function ensureItemActiveColumnExists(mysqli $conn): void {
+    $result = $conn->query("SHOW COLUMNS FROM items LIKE 'is_active'");
+    if ($result && $result->num_rows === 0) {
+        $conn->query("ALTER TABLE items ADD COLUMN is_active TINYINT(1) NOT NULL DEFAULT 1");
+    }
+    if ($result) {
+        $result->free();
+    }
+}
+
+ensureItemActiveColumnExists($conn);
+
 // Protect page - must be logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -20,7 +32,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'add_to_cart') {
         $error = "Quantity must be greater than 0.";
     } else {
         // Check if item exists and has enough stock
-        $stmt = $conn->prepare("SELECT item_name, price, stock FROM items WHERE item_id = ?");
+        $stmt = $conn->prepare("SELECT item_name, price, stock FROM items WHERE item_id = ? AND is_active = 1");
         $stmt->bind_param("i", $item_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -125,7 +137,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'process_sale') {
 
                 // Insert sale items and update stock
                 foreach ($_SESSION['cart'] as $item) {
-                    $stock_check = $conn->prepare("SELECT stock FROM items WHERE item_id = ? FOR UPDATE");
+                    $stock_check = $conn->prepare("SELECT stock FROM items WHERE item_id = ? AND is_active = 1 FOR UPDATE");
                     $stock_check->bind_param("i", $item['item_id']);
                     $stock_check->execute();
                     $stock_result = $stock_check->get_result();
@@ -178,7 +190,7 @@ if ($search !== '') {
         SELECT i.item_id, i.item_name, i.price, i.stock, c.category_name
         FROM items i
         JOIN categories c ON i.category_id = c.category_id
-        WHERE i.stock > 0 AND (i.item_name LIKE ? OR c.category_name LIKE ?)
+        WHERE i.stock > 0 AND i.is_active = 1 AND (i.item_name LIKE ? OR c.category_name LIKE ?)
         ORDER BY i.item_name
     ");
     $stmt->bind_param("ss", $like, $like);
@@ -190,7 +202,7 @@ if ($search !== '') {
         SELECT i.item_id, i.item_name, i.price, i.stock, c.category_name
         FROM items i
         JOIN categories c ON i.category_id = c.category_id
-        WHERE i.stock > 0
+        WHERE i.stock > 0 AND i.is_active = 1
         ORDER BY i.item_name
     ");
 }

@@ -27,6 +27,9 @@ ALTER TABLE sales ADD COLUMN change_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00;
 -- Add support for item images
 ALTER TABLE items ADD COLUMN IF NOT EXISTS image_path VARCHAR(255) DEFAULT NULL;
 
+-- Soft-delete support for items with sales history
+ALTER TABLE items ADD COLUMN IF NOT EXISTS is_active TINYINT(1) NOT NULL DEFAULT 1;
+
 -- Verify the tables
 DESCRIBE sale_items;
 DESCRIBE sales;
