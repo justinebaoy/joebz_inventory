@@ -27,8 +27,20 @@ if (isset($_POST['action']) && $_POST['action'] === 'add_to_cart') {
 
         if ($result->num_rows === 1) {
             $item = $result->fetch_assoc();
+            $current_cart_qty = 0;
 
-            if ($item['stock'] < $quantity) {
+            if (isset($_SESSION['cart'])) {
+                foreach ($_SESSION['cart'] as $cart_item) {
+                    if ((int)$cart_item['item_id'] === $item_id) {
+                        $current_cart_qty = (int)$cart_item['quantity'];
+                        break;
+                    }
+                }
+            }
+
+            $requested_total_qty = $current_cart_qty + $quantity;
+
+            if ($item['stock'] < $requested_total_qty) {
                 $error = "Insufficient stock. Only {$item['stock']} available.";
             } else {
                 // Initialize cart if not exists
@@ -113,6 +125,22 @@ if (isset($_POST['action']) && $_POST['action'] === 'process_sale') {
 
                 // Insert sale items and update stock
                 foreach ($_SESSION['cart'] as $item) {
+                    $stock_check = $conn->prepare("SELECT stock FROM items WHERE item_id = ? FOR UPDATE");
+                    $stock_check->bind_param("i", $item['item_id']);
+                    $stock_check->execute();
+                    $stock_result = $stock_check->get_result();
+
+                    if ($stock_result->num_rows !== 1) {
+                        throw new Exception('Item no longer exists.');
+                    }
+
+                    $available_stock = (int)$stock_result->fetch_assoc()['stock'];
+                    $stock_check->close();
+
+                    if ($available_stock < (int)$item['quantity']) {
+                        throw new Exception('Insufficient stock while processing sale.');
+                    }
+
                     // Insert sale item (assuming sale_items table exists)
                     $stmt = $conn->prepare("INSERT INTO sale_items (sale_id, item_id, quantity, price) VALUES (?, ?, ?, ?)");
                     $stmt->bind_param("iiid", $sale_id, $item['item_id'], $item['quantity'], $item['price']);
@@ -120,9 +148,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'process_sale') {
                     $stmt->close();
 
                     // Update stock
-                    $stmt = $conn->prepare("UPDATE items SET stock = stock - ? WHERE item_id = ?");
-                    $stmt->bind_param("ii", $item['quantity'], $item['item_id']);
+                    $stmt = $conn->prepare("UPDATE items SET stock = stock - ? WHERE item_id = ? AND stock >= ?");
+                    $stmt->bind_param("iii", $item['quantity'], $item['item_id'], $item['quantity']);
                     $stmt->execute();
+                    if ($stmt->affected_rows !== 1) {
+                        $stmt->close();
+                        throw new Exception('Stock update failed.');
+                    }
                     $stmt->close();
                 }
 
@@ -184,8 +216,8 @@ if (isset($_SESSION['cart'])) {
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 min-h-screen">
 
 <!-- ── SIDEBAR ── -->
-<div class="flex h-screen overflow-hidden">
-  <aside class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col fixed h-full z-10">
+<div class="flex min-h-screen">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform bg-slate-950 border-r border-slate-800 flex flex-col transition-transform duration-200 ease-out -translate-x-full md:translate-x-0">
 
     <!-- Logo -->
     <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800">
@@ -293,7 +325,20 @@ if (isset($_SESSION['cart'])) {
   </aside>
 
   <!-- ── MAIN CONTENT ── -->
-  <main class="ml-64 flex-1 overflow-y-auto p-6 bg-slate-950/40">
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 hidden bg-black/60 md:hidden"></div>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="flex-1 w-full overflow-y-auto p-4 sm:p-6 md:ml-64 bg-slate-950/40">
+
+    <div class="mb-4 flex items-center justify-between gap-3 md:hidden">
+      <button type="button" id="open-sidebar" class="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-200">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        Menu
+      </button>
+      <a href="logout.php" class="inline-flex items-center gap-2 rounded-xl border border-red-700/50 bg-red-900/20 px-3 py-2 text-sm text-red-200">Logout</a>
+    </div>
 
     <!-- Header -->
     <div class="mb-6">
@@ -476,6 +521,38 @@ if (isset($_SESSION['cart'])) {
 </div>
 
 <script>
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const openSidebarBtn = document.getElementById('open-sidebar');
+
+function openSidebar() {
+  if (!sidebar || window.innerWidth >= 768) return;
+  sidebar.classList.remove('-translate-x-full');
+  sidebarOverlay.classList.remove('hidden');
+}
+
+function closeSidebar() {
+  if (!sidebar || window.innerWidth >= 768) return;
+  sidebar.classList.add('-translate-x-full');
+  sidebarOverlay.classList.add('hidden');
+}
+
+if (openSidebarBtn) {
+  openSidebarBtn.addEventListener('click', openSidebar);
+}
+if (sidebarOverlay) {
+  sidebarOverlay.addEventListener('click', closeSidebar);
+}
+window.addEventListener('resize', () => {
+  if (!sidebar || !sidebarOverlay) return;
+  if (window.innerWidth >= 768) {
+    sidebar.classList.remove('-translate-x-full');
+    sidebarOverlay.classList.add('hidden');
+  } else {
+    sidebar.classList.add('-translate-x-full');
+  }
+});
+
 // Cash received and change calculation
 document.getElementById('cash-received').addEventListener('input', function() {
   const cashReceived = parseFloat(this.value) || 0;
