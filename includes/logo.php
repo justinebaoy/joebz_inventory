@@ -1,0 +1,1 @@
+<img src="assets/logo.png" alt="JOEBZ Logo" class="w-full h-full object-cover rounded-xl">
