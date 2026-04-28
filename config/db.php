@@ -20,7 +20,7 @@ if ($isLocalhost) {
     define('DB_HOST', 'sql105.infinityfree.com');
     define('DB_USER', 'if0_41701878');
     define('DB_PASS', 'justine150609');
-    define('DB_NAME', 'if0_41701878_inventory_system');
+    define('DB_NAME', 'if0_41701878_joebz_db');
     define('APP_ENV', 'production');
 }
 
