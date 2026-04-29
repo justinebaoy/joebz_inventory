@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="text-center mb-8">
 
       <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
-        <img src="/assets/logo.png">
+        <img src="/assets/logo.png" class="rounded-full w-full h-full object-cover">
       </div>
 
       <h1 class="text-2xl font-bold text-slate-100">JOEBZ POINT-OF-SALES SYSTEM</h1>
