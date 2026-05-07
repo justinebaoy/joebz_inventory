@@ -47,40 +47,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>JOEBZ POS - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 min-h-screen flex items-center justify-center">
-    <div class="bg-slate-900/95 rounded-2xl border border-slate-800 shadow-2xl p-8 w-full max-w-md">
+<body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 min-h-screen flex items-center justify-center px-4">
+
+    <div class="w-full max-w-md">
+        <!-- Logo and Header -->
         <div class="text-center mb-8">
-            <div class="w-16 h-16 mx-auto bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-4">
-                <span class="text-white text-2xl font-bold">J</span>
+            <div class="inline-flex items-center justify-center w-24 h-24 mb-4">
+                <img src="assets/logo.png" alt="JOEBZ Logo" class="w-full h-full object-contain">
             </div>
             <h1 class="text-2xl font-bold text-white">JOEBZ POS</h1>
-            <p class="text-slate-400 mt-2">Inventory Management System</p>
+            <p class="text-slate-400 text-sm mt-1">Inventory Management System</p>
         </div>
 
-        <?php if ($error): ?>
-            <div class="bg-red-900/40 border border-red-700 text-red-200 rounded-xl px-4 py-3 mb-6 text-sm">
-                <?= htmlspecialchars($error) ?>
-            </div>
-        <?php endif; ?>
+        <!-- Login Card -->
+        <div class="bg-slate-900/95 rounded-2xl border border-slate-800 shadow-2xl p-8">
+            <?php if ($error): ?>
+                <div class="bg-red-900/40 border border-red-700 text-red-200 rounded-xl px-4 py-3 mb-6 text-sm">
+                    <?= htmlspecialchars($error) ?>
+                </div>
+            <?php endif; ?>
 
-        <form method="POST">
-            <div class="mb-4">
-                <input type="text" name="username" placeholder="Username" required
-                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="mb-6">
-                <input type="password" name="password" placeholder="Password" required
-                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition">
-                Login
-            </button>
-        </form>
+            <form method="POST">
+                <div class="mb-4">
+                    <input type="text" name="username" placeholder="Username" required
+                           class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-6">
+                    <input type="password" name="password" placeholder="Password" required
+                           class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition">
+                    Login
+                </button>
+            </form>
 
-        <p class="text-center text-sm text-slate-400 mt-6">
-            Don't have an account?
-            <a href="register.php" class="text-blue-400 hover:underline">Create Account</a>
+            <p class="text-center text-sm text-slate-400 mt-6">
+                Don't have an account?
+                <a href="register.php" class="text-blue-400 hover:underline">Create Account</a>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center text-xs text-slate-500 mt-6">
+            &copy; <?= date('Y') ?> JOEBZ Computer Sales & Services. All rights reserved.
         </p>
     </div>
+
 </body>
 </html>
