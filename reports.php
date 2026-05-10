@@ -298,14 +298,69 @@ $last_costs_result = $conn->query("SELECT s.supplier_name, i.item_name, h.cost, 
 </head>
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 min-h-screen">
 
-    <section class="max-w-7xl mx-auto px-4 pt-6">
+    <section class="md:ml-64 max-w-7xl mx-auto px-4 md:px-6 pt-6">
         <h2 class="text-2xl font-bold mb-3">Supplier Procurement Widgets</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><h3>Open POs</h3><?php if ($open_pos_result) while($r=$open_pos_result->fetch_assoc()) echo '<div>'.htmlspecialchars($r['supplier_name']).': '.$r['open_pos'].'</div>'; ?></div>
-            <div><h3>Overdue POs</h3><?php if ($overdue_pos_result) while($r=$overdue_pos_result->fetch_assoc()) echo '<div>'.htmlspecialchars($r['supplier_name']).': '.$r['overdue_pos'].'</div>'; ?></div>
-            <div><h3>Fill Rate (%)</h3><?php if ($fill_rate_result) while($r=$fill_rate_result->fetch_assoc()) echo '<div>'.htmlspecialchars($r['supplier_name']).': '.($r['fill_rate'] ?? '0').'%</div>'; ?></div>
-            <div><h3>Recent Receipts</h3><?php if ($recent_receipts_result) while($r=$recent_receipts_result->fetch_assoc()) echo '<div>#'.$r['receipt_id'].' '.htmlspecialchars($r['supplier_name']).' @ '.$r['received_at'].'</div>'; ?></div>
-            <div class="md:col-span-2"><h3>Last Costs</h3><?php if ($last_costs_result) while($r=$last_costs_result->fetch_assoc()) echo '<div>'.htmlspecialchars($r['supplier_name']).' / '.htmlspecialchars($r['item_name']).' : '.number_format((float)$r['cost'],4).' ('.$r['effective_at'].')</div>'; ?></div>
+            <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                <h3 class="font-semibold mb-2">Open POs</h3>
+                <?php
+                if ($open_pos_result && $open_pos_result->num_rows > 0) {
+                    while ($r = $open_pos_result->fetch_assoc()) {
+                        echo '<div class="text-sm text-slate-200">' . htmlspecialchars($r['supplier_name']) . ': ' . (int)$r['open_pos'] . '</div>';
+                    }
+                } else {
+                    echo '<div class="text-sm text-slate-400">No open purchase orders.</div>';
+                }
+                ?>
+            </div>
+            <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                <h3 class="font-semibold mb-2">Overdue POs</h3>
+                <?php
+                if ($overdue_pos_result && $overdue_pos_result->num_rows > 0) {
+                    while ($r = $overdue_pos_result->fetch_assoc()) {
+                        echo '<div class="text-sm text-slate-200">' . htmlspecialchars($r['supplier_name']) . ': ' . (int)$r['overdue_pos'] . '</div>';
+                    }
+                } else {
+                    echo '<div class="text-sm text-slate-400">No overdue purchase orders.</div>';
+                }
+                ?>
+            </div>
+            <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                <h3 class="font-semibold mb-2">Fill Rate (%)</h3>
+                <?php
+                if ($fill_rate_result && $fill_rate_result->num_rows > 0) {
+                    while ($r = $fill_rate_result->fetch_assoc()) {
+                        echo '<div class="text-sm text-slate-200">' . htmlspecialchars($r['supplier_name']) . ': ' . number_format((float)($r['fill_rate'] ?? 0), 2) . '%</div>';
+                    }
+                } else {
+                    echo '<div class="text-sm text-slate-400">No fill-rate data yet.</div>';
+                }
+                ?>
+            </div>
+            <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                <h3 class="font-semibold mb-2">Recent Receipts</h3>
+                <?php
+                if ($recent_receipts_result && $recent_receipts_result->num_rows > 0) {
+                    while ($r = $recent_receipts_result->fetch_assoc()) {
+                        echo '<div class="text-sm text-slate-200">#' . (int)$r['receipt_id'] . ' ' . htmlspecialchars($r['supplier_name']) . ' @ ' . htmlspecialchars($r['received_at']) . '</div>';
+                    }
+                } else {
+                    echo '<div class="text-sm text-slate-400">No receipts posted yet.</div>';
+                }
+                ?>
+            </div>
+            <div class="md:col-span-2 rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+                <h3 class="font-semibold mb-2">Last Costs</h3>
+                <?php
+                if ($last_costs_result && $last_costs_result->num_rows > 0) {
+                    while ($r = $last_costs_result->fetch_assoc()) {
+                        echo '<div class="text-sm text-slate-200">' . htmlspecialchars($r['supplier_name']) . ' / ' . htmlspecialchars($r['item_name']) . ' : ' . number_format((float)$r['cost'], 4) . ' (' . htmlspecialchars($r['effective_at']) . ')</div>';
+                    }
+                } else {
+                    echo '<div class="text-sm text-slate-400">No supplier cost history yet.</div>';
+                }
+                ?>
+            </div>
         </div>
     </section>
 
