@@ -204,6 +204,14 @@ $prev_month_stmt->execute();
 $prev_month_sales = (float)($prev_month_stmt->get_result()->fetch_assoc()['total'] ?? 0);
 $prev_month_stmt->close();
 $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_sales) / $prev_month_sales) * 100 : 0;
+
+// Supplier-level procurement widgets
+$open_pos_result = $conn->query("SELECT s.supplier_name, COUNT(*) AS open_pos FROM purchase_orders po JOIN suppliers s ON s.supplier_id = po.supplier_id WHERE po.status IN ('submitted','partial_received') GROUP BY s.supplier_id ORDER BY open_pos DESC LIMIT 5");
+$overdue_pos_result = $conn->query("SELECT s.supplier_name, COUNT(*) AS overdue_pos FROM purchase_orders po JOIN suppliers s ON s.supplier_id = po.supplier_id WHERE po.status IN ('submitted','partial_received') AND po.expected_at IS NOT NULL AND po.expected_at < NOW() GROUP BY s.supplier_id ORDER BY overdue_pos DESC LIMIT 5");
+$fill_rate_result = $conn->query("SELECT s.supplier_name, ROUND((SUM(poi.received_qty)/NULLIF(SUM(poi.ordered_qty),0))*100,2) AS fill_rate FROM purchase_order_items poi JOIN purchase_orders po ON po.po_id = poi.po_id JOIN suppliers s ON s.supplier_id = po.supplier_id GROUP BY s.supplier_id ORDER BY fill_rate DESC LIMIT 5");
+$recent_receipts_result = $conn->query("SELECT gr.receipt_id, s.supplier_name, gr.received_at FROM goods_receipts gr JOIN purchase_orders po ON po.po_id = gr.po_id JOIN suppliers s ON s.supplier_id = po.supplier_id ORDER BY gr.received_at DESC LIMIT 8");
+$last_costs_result = $conn->query("SELECT s.supplier_name, i.item_name, h.cost, h.effective_at FROM supplier_item_cost_history h JOIN suppliers s ON s.supplier_id = h.supplier_id JOIN items i ON i.item_id = h.item_id ORDER BY h.effective_at DESC LIMIT 8");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -289,6 +297,18 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 min-h-screen">
+
+    <section class="max-w-7xl mx-auto px-4 pt-6">
+        <h2 class="text-2xl font-bold mb-3">Supplier Procurement Widgets</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><h3>Open POs</h3><?php if ($open_pos_result) while($r=$open_pos_result->fetch_assoc()) echo '<div>'.htmlspecialchars($r['supplier_name']).': '.$r['open_pos'].'</div>'; ?></div>
+            <div><h3>Overdue POs</h3><?php if ($overdue_pos_result) while($r=$overdue_pos_result->fetch_assoc()) echo '<div>'.htmlspecialchars($r['supplier_name']).': '.$r['overdue_pos'].'</div>'; ?></div>
+            <div><h3>Fill Rate (%)</h3><?php if ($fill_rate_result) while($r=$fill_rate_result->fetch_assoc()) echo '<div>'.htmlspecialchars($r['supplier_name']).': '.($r['fill_rate'] ?? '0').'%</div>'; ?></div>
+            <div><h3>Recent Receipts</h3><?php if ($recent_receipts_result) while($r=$recent_receipts_result->fetch_assoc()) echo '<div>#'.$r['receipt_id'].' '.htmlspecialchars($r['supplier_name']).' @ '.$r['received_at'].'</div>'; ?></div>
+            <div class="md:col-span-2"><h3>Last Costs</h3><?php if ($last_costs_result) while($r=$last_costs_result->fetch_assoc()) echo '<div>'.htmlspecialchars($r['supplier_name']).' / '.htmlspecialchars($r['item_name']).' : '.number_format((float)$r['cost'],4).' ('.$r['effective_at'].')</div>'; ?></div>
+        </div>
+    </section>
+
 
 <!-- ═══════════ SIDEBAR ═══════════ -->
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform bg-slate-950 border-r border-slate-800 flex flex-col transition-transform duration-200 ease-out -translate-x-full md:translate-x-0">
