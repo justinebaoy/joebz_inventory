@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $expected_time = $expected_time !== '' ? $expected_time : '00:00';
                 $expected_dt = DateTime::createFromFormat('Y-m-d H:i', $expected_date . ' ' . $expected_time);
                 $expected_errors = DateTime::getLastErrors();
-                if ($expected_dt === false || $expected_errors['warning_count'] > 0 || $expected_errors['error_count'] > 0) {
+                $expected_has_errors = is_array($expected_errors) && (($expected_errors['warning_count'] ?? 0) > 0 || ($expected_errors['error_count'] ?? 0) > 0);
+                if ($expected_dt === false || $expected_has_errors) {
                     $msg = 'Invalid expected date/time.';
                     $msg_is_error = true;
                 } else {
@@ -47,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $expected_dt = DateTime::createFromFormat('Y-m-d H:i', $expected_at_legacy);
                 }
                 $expected_errors = DateTime::getLastErrors();
-                if ($expected_dt === false || $expected_errors['warning_count'] > 0 || $expected_errors['error_count'] > 0) {
+                $expected_has_errors = is_array($expected_errors) && (($expected_errors['warning_count'] ?? 0) > 0 || ($expected_errors['error_count'] ?? 0) > 0);
+                if ($expected_dt === false || $expected_has_errors) {
                     $msg = 'Invalid expected date/time.';
                     $msg_is_error = true;
                 } else {
@@ -140,7 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $received_time = $received_time !== '' ? $received_time : '00:00';
             $received_dt = DateTime::createFromFormat('Y-m-d H:i', $received_date . ' ' . $received_time);
             $received_errors = DateTime::getLastErrors();
-            if ($received_dt === false || $received_errors['warning_count'] > 0 || $received_errors['error_count'] > 0) {
+            $received_has_errors = is_array($received_errors) && (($received_errors['warning_count'] ?? 0) > 0 || ($received_errors['error_count'] ?? 0) > 0);
+            if ($received_dt === false || $received_has_errors) {
                 $msg = 'Invalid received date/time.';
                 $msg_is_error = true;
             }
@@ -151,7 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $received_dt = DateTime::createFromFormat('Y-m-d H:i', $received_at_legacy);
             }
             $received_errors = DateTime::getLastErrors();
-            if ($received_dt === false || $received_errors['warning_count'] > 0 || $received_errors['error_count'] > 0) {
+            $received_has_errors = is_array($received_errors) && (($received_errors['warning_count'] ?? 0) > 0 || ($received_errors['error_count'] ?? 0) > 0);
+            if ($received_dt === false || $received_has_errors) {
                 $msg = 'Invalid received date/time.';
                 $msg_is_error = true;
             }
