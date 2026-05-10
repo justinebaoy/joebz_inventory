@@ -1,0 +1,1116 @@
+[08-May-2026 19:12:10 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:10 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:10 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:10 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:12:10 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 0%, Price: 73000, Discounted: 73000
+[08-May-2026 19:12:10 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:10 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:10 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:10 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:12:10 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 0%, Price: 73000, Discounted: 73000
+[08-May-2026 19:12:11 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:11 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:11 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:11 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:12:11 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 0%, Price: 73000, Discounted: 73000
+[08-May-2026 19:12:12 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:12 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:12 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:12 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:12 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:12 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:12 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:12 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:12 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:12 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:12:12 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 0%, Price: 73000, Discounted: 73000
+[08-May-2026 19:12:14 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:14 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:14 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:14 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:12:16 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:16 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:16 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:16 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:16 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:16 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:16 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:12:16 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 0%, Price: 73000, Discounted: 73000
+[08-May-2026 19:12:34 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:34 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:34 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:34 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:12:34 Europe/Berlin] Active discounts found: 0
+[08-May-2026 19:12:34 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:12:34 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:12:34 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 0%, Price: 73000, Discounted: 73000
+[08-May-2026 19:17:46 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:17:46 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:46 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:17:46 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:17:46 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:17:46 Europe/Berlin]   Applied discount: 15.00% (was 0%)
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:46 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:46 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:17:46 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 15.00%, Price: 73000, Discounted: 62050
+[08-May-2026 19:17:50 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:17:50 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:50 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:17:50 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:17:50 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:50 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:17:50 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:50 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:17:50 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:17:50 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:17:50 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:17:50 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:50 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:17:50 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:17:50 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:50 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:50 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:17:50 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 15.00%, Price: 73000, Discounted: 62050
+[08-May-2026 19:17:53 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:17:53 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:53 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:17:53 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:17:53 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:53 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:53 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:54 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:17:54 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:54 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:17:54 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:17:54 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin]   Applied discount: 15.00% (was 0%)
+[08-May-2026 19:17:54 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:17:54 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:17:54 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:17:54 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:17:54 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:17:54 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:17:54 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:17:54 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 15.00%, Price: 73000, Discounted: 62050
+[08-May-2026 19:19:09 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:19:09 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:19:09 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:19:09 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:19:09 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:09 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:16 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:19:17 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:17 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:17 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:18 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:19:18 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:19:18 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:19:18 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:19:18 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin]   Applied discount: 15.00% (was 0%)
+[08-May-2026 19:19:18 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:19:18 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:19:18 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:19:18 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:19:18 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:18 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:19:18 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 15.00%, Price: 73000, Discounted: 62050
+[08-May-2026 19:19:23 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:19:23 Europe/Berlin] Active discounts found: 10
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:19:23 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:19:23 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:19:23 Europe/Berlin]   Found item discount: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:19:23 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:19:23 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:03 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:03 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:16 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:34 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:34 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:40 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:21:42 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:23:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:23:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:23:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:23:04 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:23:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:23:04 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:23:04 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:23:04 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:24:01 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:24:01 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:24:01 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:24:01 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:24:01 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:24:01 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:24:01 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:24:01 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:27:27 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:27:27 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:27:27 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:27:27 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:27:27 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:27:27 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:27:27 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:27:27 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:27:28 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:27:28 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:27:28 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:27:28 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:27:28 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:27:28 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:27:28 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:27:28 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:28:10 Europe/Berlin] Active discounts found: 7
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:28:10 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:28:10 Europe/Berlin]   Found category discount: 15.00%
+[08-May-2026 19:28:10 Europe/Berlin]   Applied discount: 15.00% (was 0%)
+[08-May-2026 19:28:10 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:28:10 Europe/Berlin] Active discounts found: 7
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:28:10 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:28:10 Europe/Berlin]   Found category discount: 15.00%
+[08-May-2026 19:28:10 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:10 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:28:10 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 15.00%, Price: 73000, Discounted: 62050
+[08-May-2026 19:28:12 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:28:12 Europe/Berlin] Active discounts found: 7
+[08-May-2026 19:28:12 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:28:12 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:28:12 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:28:12 Europe/Berlin]   Found category discount: 15.00%
+[08-May-2026 19:28:12 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:12 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:28:15 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:15 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:15 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:15 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:15 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:15 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:15 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:15 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:28:16 Europe/Berlin] Active discounts found: 7
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:28:16 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:28:16 Europe/Berlin]   Found category discount: 15.00%
+[08-May-2026 19:28:16 Europe/Berlin]   Applied discount: 15.00% (was 0%)
+[08-May-2026 19:28:16 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:28:16 Europe/Berlin] Active discounts found: 7
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:28:16 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:28:16 Europe/Berlin]   Found category discount: 15.00%
+[08-May-2026 19:28:16 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:16 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:28:16 Europe/Berlin] Cart item: ASUS TUF A16, Discount: 15.00%, Price: 73000, Discounted: 62050
+[08-May-2026 19:28:18 Europe/Berlin] === applyDiscountsToCart ===
+[08-May-2026 19:28:18 Europe/Berlin] Active discounts found: 7
+[08-May-2026 19:28:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=10.00%
+[08-May-2026 19:28:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Discount: Type=category, Target=1, Percent=15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Discount: Type=item, Target=1, Percent=15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1, Category: 1)
+[08-May-2026 19:28:18 Europe/Berlin]   Found category discount: 10.00%
+[08-May-2026 19:28:18 Europe/Berlin]   Found category discount: 15.00%
+[08-May-2026 19:28:18 Europe/Berlin]   Applied discount: 15.00% (was 15.00%)
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:28:18 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:29:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:29:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:29:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:29:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:29:18 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:29:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:29:18 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:29:18 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:30:55 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:30:55 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:30:55 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:30:55 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:30:55 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:30:55 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:30:55 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:30:55 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:32:00 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:32:00 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:32:00 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:32:00 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:32:00 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:32:00 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:32:00 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:32:00 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:04 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 10.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1 (from category 1): 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] Product discount map - Item 1: 15.00%
+[08-May-2026 19:33:09 Europe/Berlin] === CART DISPLAY ===
+[08-May-2026 20:22:41 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:22:41 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:22:42 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:22:42 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:22:43 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:22:43 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:22:43 Europe/Berlin] === APPLYING DISCOUNTS TO CART ===
+[08-May-2026 20:22:43 Europe/Berlin] Number of active discounts found: 0
+[08-May-2026 20:22:43 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1)
+[08-May-2026 20:22:43 Europe/Berlin] Item category ID: 1
+[08-May-2026 20:22:43 Europe/Berlin]   Best discount for ASUS TUF A16: 0%
+[08-May-2026 20:22:43 Europe/Berlin]   Price change: 73000 -> 73000
+[08-May-2026 20:22:43 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:22:43 Europe/Berlin] Item: ASUS TUF A16, Discount%: 0, Price: 73000 -> 73000
+[08-May-2026 20:22:45 Europe/Berlin] === APPLYING DISCOUNTS TO CART ===
+[08-May-2026 20:22:45 Europe/Berlin] Number of active discounts found: 0
+[08-May-2026 20:22:45 Europe/Berlin] Checking item: ASUS TUF A16 (ID: 1)
+[08-May-2026 20:22:45 Europe/Berlin] Item category ID: 1
+[08-May-2026 20:22:45 Europe/Berlin]   Best discount for ASUS TUF A16: 0%
+[08-May-2026 20:22:45 Europe/Berlin]   Price change: 73000 -> 73000
+[08-May-2026 20:22:45 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:22:45 Europe/Berlin] Item: ASUS TUF A16, Discount%: 0, Price: 73000 -> 73000
+[08-May-2026 20:22:45 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:22:45 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:22:49 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:22:49 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:03 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:03 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:03 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:03 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:07 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:07 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:09 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:09 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:19 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:19 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:19 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:19 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:20 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:20 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:20 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:20 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:25 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:25 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:28 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:28 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:23:28 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:23:28 Europe/Berlin] === AFTER applyDiscountsToCart ON PAGE LOAD ===
+[08-May-2026 20:27:24 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:27:24 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[08-May-2026 20:27:25 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:27:25 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[08-May-2026 20:27:26 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:27:26 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[08-May-2026 20:27:34 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:27:34 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[08-May-2026 20:27:36 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:27:37 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[08-May-2026 20:28:18 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:28:18 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[08-May-2026 20:29:11 Europe/Berlin] Cart is empty, skipping discount application
+[08-May-2026 20:29:11 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:27 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:27 Europe/Berlin] getActiveDiscounts found: 2 discounts
+[09-May-2026 18:23:34 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:34 Europe/Berlin] getActiveDiscounts found: 2 discounts
+[09-May-2026 18:23:34 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:34 Europe/Berlin] getActiveDiscounts found: 1 discounts
+[09-May-2026 18:23:37 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:37 Europe/Berlin] getActiveDiscounts found: 1 discounts
+[09-May-2026 18:23:37 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:37 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:48 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:48 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:48 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:48 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:54 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:54 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:55 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:55 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:55 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:55 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:56 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:56 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:56 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:56 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:56 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:56 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:23:56 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:23:56 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:24:03 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:24:03 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:24:14 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:24:14 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:24:44 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:24:44 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:24:44 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:24:44 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:24:58 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:24:58 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:25:38 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:25:38 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:25:39 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:25:39 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:26:12 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:26:12 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:26:14 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:26:14 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:26:14 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:26:14 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:26:51 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:26:51 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:26:52 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:26:52 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:26:52 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:26:52 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:26:59 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:26:59 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:27:01 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:27:01 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:27:01 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:27:01 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:27:01 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:27:01 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:27:01 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:27:01 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:27:02 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:27:02 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:27:02 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:27:02 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:27:06 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:27:06 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:48:52 Europe/Berlin] getActiveDiscounts found: 2 discounts
+[09-May-2026 18:48:52 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:48:58 Europe/Berlin] getActiveDiscounts found: 2 discounts
+[09-May-2026 18:48:58 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:48:58 Europe/Berlin] getActiveDiscounts found: 1 discounts
+[09-May-2026 18:48:58 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:01 Europe/Berlin] getActiveDiscounts found: 1 discounts
+[09-May-2026 18:49:01 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:01 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:01 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:11 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:11 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:11 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:11 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:16 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:16 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:17 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:17 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:17 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:17 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:17 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:17 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:18 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:18 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:18 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:18 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:43 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:43 Europe/Berlin] Cart is empty, skipping discount application
+[09-May-2026 18:49:45 Europe/Berlin] getActiveDiscounts found: 0 discounts
+[09-May-2026 18:49:45 Europe/Berlin] Cart is empty, skipping discount application
+[10-May-2026 00:50:57 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:50:57 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:50:58 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:50:58 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:00 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:00 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:05 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:05 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:21 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:21 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:21 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:51:21 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:24 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:51:24 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:27 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:51:27 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:27 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:27 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:29 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:29 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:29 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 00:51:29 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:39 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 00:51:39 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:39 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:39 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:52 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:52 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:54 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:54 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:51:54 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 00:51:54 Asia/Manila] Active discounts: 1
+[10-May-2026 00:51:54 Asia/Manila] Item: ASUS TUF A16 | Discount: 15% | Price: 73000 -> 62050
+[10-May-2026 00:51:54 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:54 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 00:51:54 Asia/Manila] Active discounts: 1
+[10-May-2026 00:51:54 Asia/Manila] Item: ASUS TUF A16 | Discount: 15% | Price: 73000 -> 62050
+[10-May-2026 00:51:56 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:56 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 00:51:56 Asia/Manila] Active discounts: 1
+[10-May-2026 00:51:56 Asia/Manila] Item: ASUS TUF A16 | Discount: 15% | Price: 73000 -> 62050
+[10-May-2026 00:51:56 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:51:56 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:52:09 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:52:09 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:52:26 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:52:26 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:52:26 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:52:26 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:52:45 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:52:45 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:52:45 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:52:45 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:53:17 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:53:17 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:53:17 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:53:17 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:53:47 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:53:47 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:53:55 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:53:55 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:53:55 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:53:55 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:54:09 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:54:09 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:54:09 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:54:09 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:54:30 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:54:30 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:54:42 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:54:42 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:54:55 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:54:55 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:24 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:55:24 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:26 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:55:26 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:28 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:55:28 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:28 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:55:28 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:31 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:55:31 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:31 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:55:31 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:35 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:55:35 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:35 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:55:35 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:35 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:55:35 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:35 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 00:55:35 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:55:58 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 00:55:58 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:57:24 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 00:57:24 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:57:24 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:57:24 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:58:35 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:58:35 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:58:46 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:58:46 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:58:46 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:58:46 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:58:57 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:58:57 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:58:57 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:58:57 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:58:59 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:58:59 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:58:59 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:58:59 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:00 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:59:00 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:07 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:59:07 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:07 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:59:07 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:12 Asia/Manila] getActiveDiscounts found: 4 discounts
+[10-May-2026 00:59:12 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:12 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:59:12 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:14 Asia/Manila] getActiveDiscounts found: 3 discounts
+[10-May-2026 00:59:14 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:14 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:59:14 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:15 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 00:59:15 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:16 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:59:16 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:19 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:59:19 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:19 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 00:59:19 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:32 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 00:59:32 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:32 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:59:32 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:38 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 00:59:38 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 00:59:38 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 00:59:38 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:00:22 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 01:00:22 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:32:17 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 01:32:17 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:32:29 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 01:32:29 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:32:30 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 01:32:30 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:32:50 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 01:32:50 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:41:12 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 01:41:12 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:41:23 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 01:41:23 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:41:23 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 01:41:23 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:41:27 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 01:41:27 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:41:27 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 01:41:27 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:56:32 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 01:56:32 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:56:37 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 01:56:37 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:56:38 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 01:56:38 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:56:48 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 01:56:48 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 01:56:48 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 01:56:48 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:01:29 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:01:29 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:08:49 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:08:49 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:10:29 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:10:29 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:26:08 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:26:08 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:26:10 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:26:10 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:26:12 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:26:12 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:26:16 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:26:16 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:26:19 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:26:19 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:26:46 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:26:46 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:26:47 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:26:47 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:26:55 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:26:55 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:27:00 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:27:00 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:30:34 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:30:34 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:30:51 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:30:51 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:31:01 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:31:01 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:31:15 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:31:15 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:31:15 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 02:31:15 Asia/Manila] Active discounts: 1
+[10-May-2026 02:31:15 Asia/Manila] Item: ASUS TUF A15 | Discount: 0% | Price: 50000 -> 50000
+[10-May-2026 02:31:15 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:31:15 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 02:31:15 Asia/Manila] Active discounts: 1
+[10-May-2026 02:31:15 Asia/Manila] Item: ASUS TUF A15 | Discount: 0% | Price: 50000 -> 50000
+[10-May-2026 02:31:44 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:31:44 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 02:31:44 Asia/Manila] Active discounts: 1
+[10-May-2026 02:31:44 Asia/Manila] Item: ASUS TUF A15 | Discount: 0% | Price: 50000 -> 50000
+[10-May-2026 02:31:44 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:31:44 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:32:24 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:32:24 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:32:38 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:32:38 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:32:42 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:32:42 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:32:42 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:32:42 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:32:49 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:32:49 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:32:49 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 02:32:49 Asia/Manila] Active discounts: 1
+[10-May-2026 02:32:49 Asia/Manila] Item: ASUS TUF A16 | Discount: 15% | Price: 73000 -> 62050
+[10-May-2026 02:32:49 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:32:49 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 02:32:49 Asia/Manila] Active discounts: 1
+[10-May-2026 02:32:49 Asia/Manila] Item: ASUS TUF A16 | Discount: 15% | Price: 73000 -> 62050
+[10-May-2026 02:33:08 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:33:08 Asia/Manila] === APPLYING DISCOUNTS TO CART ===
+[10-May-2026 02:33:08 Asia/Manila] Active discounts: 1
+[10-May-2026 02:33:08 Asia/Manila] Item: ASUS TUF A16 | Discount: 15% | Price: 73000 -> 62050
+[10-May-2026 02:33:08 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:33:08 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 02:34:12 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 02:34:12 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 18:51:46 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 18:51:46 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 18:51:59 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 18:51:59 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 18:51:59 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 18:51:59 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 18:52:03 Asia/Manila] getActiveDiscounts found: 2 discounts
+[10-May-2026 18:52:03 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 18:52:03 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 18:52:03 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 18:52:06 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 18:52:06 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 18:52:07 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 18:52:07 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 18:59:46 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 18:59:46 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 19:04:35 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 19:04:35 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 19:04:38 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 19:04:38 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 19:04:38 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 19:04:38 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 19:04:46 Asia/Manila] getActiveDiscounts found: 0 discounts
+[10-May-2026 19:04:46 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 19:04:46 Asia/Manila] getActiveDiscounts found: 1 discounts
+[10-May-2026 19:04:46 Asia/Manila] Cart is empty, skipping discount application
+[10-May-2026 19:13:37 Asia/Manila] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in C:\xampp\htdocs\Inventory_Joebz\sales.php:266
+Stack trace:
+#0 C:\xampp\htdocs\Inventory_Joebz\sales.php(266): mysqli_stmt->bind_param('iidddss', 1, 3, 50000.0, 7500.0, 50000.0, 7500.0, 'Terrence Cabino...', '')
+#1 {main}
+  thrown in C:\xampp\htdocs\Inventory_Joebz\sales.php on line 266
