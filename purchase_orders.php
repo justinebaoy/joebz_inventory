@@ -23,7 +23,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'create_po') {
         $supplier_id = (int)$_POST['supplier_id'];
-        $expected_at = $_POST['expected_at'] ?: null;
+        $expected_date = trim($_POST['expected_date'] ?? '');
+        $expected_time = trim($_POST['expected_time'] ?? '');
+        $expected_at_legacy = trim($_POST['expected_at'] ?? '');
+        if ($expected_date !== '') {
+            $expected_time = $expected_time !== '' ? $expected_time : '00:00';
+            $expected_at = $expected_date . ' ' . $expected_time . ':00';
+        } elseif ($expected_at_legacy !== '') {
+            $expected_at = str_replace('T', ' ', $expected_at_legacy);
+            if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $expected_at)) {
+                $expected_at .= ':00';
+            }
+        } else {
+            $expected_at = null;
+        }
         $currency = $_POST['currency'] ?: 'PHP';
         $notes = $_POST['notes'] ?? null;
         $po_number = 'PO-' . date('YmdHis');
@@ -62,7 +75,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'post_receipt') {
         $po_id = (int)$_POST['po_id'];
-        $received_at = $_POST['received_at'];
+        $received_date = trim($_POST['received_date'] ?? '');
+        $received_time = trim($_POST['received_time'] ?? '');
+        $received_at_legacy = trim($_POST['received_at'] ?? '');
+        if ($received_date !== '') {
+            $received_time = $received_time !== '' ? $received_time : '00:00';
+            $received_at = $received_date . ' ' . $received_time . ':00';
+        } elseif ($received_at_legacy !== '') {
+            $received_at = str_replace('T', ' ', $received_at_legacy);
+            if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $received_at)) {
+                $received_at .= ':00';
+            }
+        } else {
+            $received_at = date('Y-m-d H:i:s');
+        }
         $is_backdated = (strtotime($received_at) < strtotime(date('Y-m-d H:i:s')) - 300) ? 1 : 0;
         if ($is_backdated && !can_post_backdated()) {
             $msg = 'Only admin/manager can post backdated receipts.';
@@ -213,8 +239,12 @@ $po_rows = $conn->query('SELECT po.*, s.supplier_name FROM purchase_orders po JO
                         </select>
                     </div>
                     <div>
-                        <label for="expected_at" class="block text-sm text-slate-200 mb-1">Expected date/time</label>
-                        <input id="expected_at" name="expected_at" type="datetime-local" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100"/>
+                        <label for="expected_date" class="block text-sm text-slate-200 mb-1">Expected date/time</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input id="expected_date" name="expected_date" type="date" placeholder="YYYY-MM-DD" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100 placeholder-slate-300"/>
+                            <input id="expected_time" name="expected_time" type="time" placeholder="HH:MM" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100 placeholder-slate-300"/>
+                        </div>
+                        <p class="mt-1 text-xs text-slate-400">Use 24-hour time (HH:MM).</p>
                     </div>
                     <div>
                         <label for="currency" class="block text-sm text-slate-200 mb-1">Currency</label>
@@ -258,7 +288,11 @@ $po_rows = $conn->query('SELECT po.*, s.supplier_name FROM purchase_orders po JO
             <form method="post" class="mt-3 space-y-2">
                 <input type="hidden" name="action" value="post_receipt"><input type="hidden" name="po_id" value="<?php echo $po['po_id']; ?>">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
-                    <input type="datetime-local" name="received_at" value="<?php echo date('Y-m-d\TH:i'); ?>" class="rounded-lg bg-slate-800 border border-slate-700 p-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <input type="date" name="received_date" value="<?php echo date('Y-m-d'); ?>" placeholder="YYYY-MM-DD" class="rounded-lg bg-slate-800 border border-slate-700 p-2 placeholder-slate-300">
+                        <input type="time" name="received_time" value="<?php echo date('H:i'); ?>" placeholder="HH:MM" class="rounded-lg bg-slate-800 border border-slate-700 p-2 placeholder-slate-300">
+                    </div>
+                    <p class="text-xs text-slate-400 md:col-span-2">Use 24-hour time (HH:MM).</p>
                     <input name="reference_no" placeholder="ref no" class="rounded-lg bg-slate-800 border border-slate-700 p-2">
                     <input name="landed_cost_total" type="number" step="0.0001" placeholder="landed cost total" class="rounded-lg bg-slate-800 border border-slate-700 p-2">
                     <select name="allocation_method" class="rounded-lg bg-slate-800 border border-slate-700 p-2"><option value="value">By Line Value</option><option value="qty">By Qty</option></select>
