@@ -18,48 +18,105 @@ function validate_po_transition($from, $to) {
 }
 
 $msg = '';
+$msg_is_error = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'create_po') {
-        $supplier_id = (int)$_POST['supplier_id'];
+        $supplier_id = (int)($_POST['supplier_id'] ?? 0);
         $expected_date = trim($_POST['expected_date'] ?? '');
         $expected_time = trim($_POST['expected_time'] ?? '');
         $expected_at_legacy = trim($_POST['expected_at'] ?? '');
-        if ($expected_date !== '') {
-            $expected_time = $expected_time !== '' ? $expected_time : '00:00';
-            $expected_at = $expected_date . ' ' . $expected_time . ':00';
-        } elseif ($expected_at_legacy !== '') {
-            $expected_at = str_replace('T', ' ', $expected_at_legacy);
-            if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $expected_at)) {
-                $expected_at .= ':00';
-            }
-        } else {
-            $expected_at = null;
-        }
-        $currency = $_POST['currency'] ?: 'PHP';
-        $notes = $_POST['notes'] ?? null;
-        $po_number = 'PO-' . date('YmdHis');
+        $expected_at = null;
 
-        $stmt = $conn->prepare('INSERT INTO purchase_orders (po_number, supplier_id, status, expected_at, currency, notes, created_by) VALUES (?, ?, "draft", ?, ?, ?, ?)');
-        $stmt->bind_param('sisssi', $po_number, $supplier_id, $expected_at, $currency, $notes, $_SESSION['user_id']);
-        $stmt->execute();
-        $po_id = $conn->insert_id;
+        if ($expected_date !== '' || $expected_time !== '' || $expected_at_legacy !== '') {
+            if ($expected_date !== '') {
+                $expected_time = $expected_time !== '' ? $expected_time : '00:00';
+                $expected_dt = DateTime::createFromFormat('Y-m-d H:i', $expected_date . ' ' . $expected_time);
+                $expected_errors = DateTime::getLastErrors();
+                if ($expected_dt === false || $expected_errors['warning_count'] > 0 || $expected_errors['error_count'] > 0) {
+                    $msg = 'Invalid expected date/time.';
+                    $msg_is_error = true;
+                } else {
+                    $expected_at = $expected_dt->format('Y-m-d H:i:s');
+                }
+            } elseif ($expected_at_legacy !== '') {
+                $expected_at_legacy = str_replace('T', ' ', $expected_at_legacy);
+                $expected_dt = DateTime::createFromFormat('Y-m-d H:i:s', $expected_at_legacy);
+                if ($expected_dt === false) {
+                    $expected_dt = DateTime::createFromFormat('Y-m-d H:i', $expected_at_legacy);
+                }
+                $expected_errors = DateTime::getLastErrors();
+                if ($expected_dt === false || $expected_errors['warning_count'] > 0 || $expected_errors['error_count'] > 0) {
+                    $msg = 'Invalid expected date/time.';
+                    $msg_is_error = true;
+                } else {
+                    $expected_at = $expected_dt->format('Y-m-d H:i:s');
+                }
+            }
+        }
 
         $item_ids = $_POST['item_id'] ?? [];
         $qtys = $_POST['ordered_qty'] ?? [];
         $costs = $_POST['unit_cost'] ?? [];
-        foreach ($item_ids as $i => $item_id) {
-            $q = (float)($qtys[$i] ?? 0);
-            $c = (float)($costs[$i] ?? 0);
-            if ($item_id && $q > 0) {
-                $line_total = $q * $c;
-                $ins = $conn->prepare('INSERT INTO purchase_order_items (po_id,item_id,ordered_qty,unit_cost,tax,discount,line_total) VALUES (?,?,?,?,0,0,?)');
-                $ins->bind_param('iiddd', $po_id, $item_id, $q, $c, $line_total);
-                $ins->execute();
+        $has_valid_item = false;
+
+        if (!$msg_is_error && $supplier_id <= 0) {
+            $msg = 'Please select a supplier.';
+            $msg_is_error = true;
+        }
+
+        if (!$msg_is_error) {
+            foreach ($item_ids as $i => $item_id) {
+                $item_id = (int)$item_id;
+                $q_raw = trim((string)($qtys[$i] ?? ''));
+                $c_raw = trim((string)($costs[$i] ?? ''));
+
+                if ($q_raw !== '' && (!is_numeric($q_raw) || (float)$q_raw < 0)) {
+                    $msg = 'Ordered quantity must be a non-negative number.';
+                    $msg_is_error = true;
+                    break;
+                }
+                if ($c_raw !== '' && (!is_numeric($c_raw) || (float)$c_raw < 0)) {
+                    $msg = 'Unit cost must be a non-negative number.';
+                    $msg_is_error = true;
+                    break;
+                }
+
+                if ($item_id > 0 && is_numeric($q_raw) && (float)$q_raw > 0) {
+                    $has_valid_item = true;
+                }
             }
         }
-        $msg = 'PO created.';
+
+        if (!$msg_is_error && !$has_valid_item) {
+            $msg = 'Please add at least one item with quantity greater than 0.';
+            $msg_is_error = true;
+        }
+
+        if (!$msg_is_error) {
+            $currency = $_POST['currency'] ?: 'PHP';
+            $notes = $_POST['notes'] ?? null;
+            $po_number = 'PO-' . date('YmdHis');
+
+            $stmt = $conn->prepare('INSERT INTO purchase_orders (po_number, supplier_id, status, expected_at, currency, notes, created_by) VALUES (?, ?, "draft", ?, ?, ?, ?)');
+            $stmt->bind_param('sisssi', $po_number, $supplier_id, $expected_at, $currency, $notes, $_SESSION['user_id']);
+            $stmt->execute();
+            $po_id = $conn->insert_id;
+
+            foreach ($item_ids as $i => $item_id) {
+                $item_id = (int)$item_id;
+                $q = (float)($qtys[$i] ?? 0);
+                $c = (float)($costs[$i] ?? 0);
+                if ($item_id > 0 && $q > 0) {
+                    $line_total = $q * $c;
+                    $ins = $conn->prepare('INSERT INTO purchase_order_items (po_id,item_id,ordered_qty,unit_cost,tax,discount,line_total) VALUES (?,?,?,?,0,0,?)');
+                    $ins->bind_param('iiddd', $po_id, $item_id, $q, $c, $line_total);
+                    $ins->execute();
+                }
+            }
+            $msg = 'PO created.';
+        }
     }
 
     if ($action === 'submit_po' && can_manage_po()) {
@@ -78,19 +135,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $received_date = trim($_POST['received_date'] ?? '');
         $received_time = trim($_POST['received_time'] ?? '');
         $received_at_legacy = trim($_POST['received_at'] ?? '');
+        $received_dt = null;
         if ($received_date !== '') {
             $received_time = $received_time !== '' ? $received_time : '00:00';
-            $received_at = $received_date . ' ' . $received_time . ':00';
+            $received_dt = DateTime::createFromFormat('Y-m-d H:i', $received_date . ' ' . $received_time);
+            $received_errors = DateTime::getLastErrors();
+            if ($received_dt === false || $received_errors['warning_count'] > 0 || $received_errors['error_count'] > 0) {
+                $msg = 'Invalid received date/time.';
+                $msg_is_error = true;
+            }
         } elseif ($received_at_legacy !== '') {
-            $received_at = str_replace('T', ' ', $received_at_legacy);
-            if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $received_at)) {
-                $received_at .= ':00';
+            $received_at_legacy = str_replace('T', ' ', $received_at_legacy);
+            $received_dt = DateTime::createFromFormat('Y-m-d H:i:s', $received_at_legacy);
+            if ($received_dt === false) {
+                $received_dt = DateTime::createFromFormat('Y-m-d H:i', $received_at_legacy);
+            }
+            $received_errors = DateTime::getLastErrors();
+            if ($received_dt === false || $received_errors['warning_count'] > 0 || $received_errors['error_count'] > 0) {
+                $msg = 'Invalid received date/time.';
+                $msg_is_error = true;
             }
         } else {
-            $received_at = date('Y-m-d H:i:s');
+            $received_dt = new DateTime();
         }
-        $is_backdated = (strtotime($received_at) < strtotime(date('Y-m-d H:i:s')) - 300) ? 1 : 0;
-        if ($is_backdated && !can_post_backdated()) {
+
+        if ($msg_is_error) {
+            // Skip DB actions when received date/time is malformed.
+        } else {
+            $received_at = $received_dt->format('Y-m-d H:i:s');
+            $now_ts = time();
+            $received_ts = $received_dt->getTimestamp();
+            $is_backdated = ($received_ts < ($now_ts - 300)) ? 1 : 0;
+            if ($is_backdated && !can_post_backdated()) {
             $msg = 'Only admin/manager can post backdated receipts.';
         } else {
             $method = $_POST['allocation_method'] === 'qty' ? 'qty' : 'value';
@@ -148,6 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $next = ((float)$statusRow['r'] <= 0) ? 'submitted' : (((float)$statusRow['r'] < (float)$statusRow['o']) ? 'partial_received' : 'received');
             $conn->query("UPDATE purchase_orders SET status = '{$next}' WHERE po_id = {$po_id}");
             $msg = 'Receipt posted and inventory updated.';
+            }
         }
     }
 }
@@ -224,7 +301,7 @@ $po_rows = $conn->query('SELECT po.*, s.supplier_name FROM purchase_orders po JO
             <button id="open-sidebar" class="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-200">Menu</button>
         </div>
         <h1 class="text-3xl font-bold">Purchase Orders</h1>
-        <?php if ($msg): ?><p class="mt-3 rounded-lg border border-emerald-700/40 bg-emerald-900/30 px-4 py-2 text-emerald-200 text-sm"><?php echo htmlspecialchars($msg); ?></p><?php endif; ?>
+        <?php if ($msg): ?><p class="mt-3 rounded-lg border px-4 py-2 text-sm <?= $msg_is_error ? 'border-red-700/40 bg-red-900/30 text-red-200' : 'border-emerald-700/40 bg-emerald-900/30 text-emerald-200' ?>"><?php echo htmlspecialchars($msg); ?></p><?php endif; ?>
 
         <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
             <h2 class="text-lg font-semibold mb-3">Create PO</h2>
