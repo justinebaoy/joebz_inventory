@@ -130,41 +130,89 @@ $suppliers = $conn->query('SELECT supplier_id, supplier_name FROM suppliers WHER
 $items = $conn->query('SELECT item_id, item_name FROM items ORDER BY item_name');
 $po_rows = $conn->query('SELECT po.*, s.supplier_name FROM purchase_orders po JOIN suppliers s ON s.supplier_id = po.supplier_id ORDER BY po.created_at DESC LIMIT 100');
 ?>
-<html><body>
-<h2>Purchase Orders</h2>
-<p><?php echo htmlspecialchars($msg); ?></p>
-<form method="post">
-<input type="hidden" name="action" value="create_po" />
-<select name="supplier_id"><?php while($s=$suppliers->fetch_assoc()){ echo '<option value="'.$s['supplier_id'].'">'.htmlspecialchars($s['supplier_name']).'</option>'; } ?></select>
-<input name="expected_at" type="datetime-local"/>
-<input name="currency" value="PHP"/>
-<textarea name="notes" placeholder="notes"></textarea>
-<?php for($i=0;$i<3;$i++): ?>
-<div>
-<select name="item_id[]"><option value="">item</option><?php $items->data_seek(0); while($it=$items->fetch_assoc()){ echo '<option value="'.$it['item_id'].'">'.htmlspecialchars($it['item_name']).'</option>'; } ?></select>
-<input name="ordered_qty[]" type="number" step="0.01" />
-<input name="unit_cost[]" type="number" step="0.0001" />
-</div>
-<?php endfor; ?>
-<button>Create PO</button></form>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Purchase Orders - JOEBZ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 min-h-screen">
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform bg-slate-950 border-r border-slate-800 flex flex-col transition-transform duration-200 ease-out -translate-x-full md:translate-x-0">
+    <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800">
+        <img src="assets/logo.png" alt="JOEBZ Logo" class="w-10 h-10 rounded-xl object-cover">
+        <span class="text-lg font-bold text-slate-100 tracking-tight" style="font-family:'Syne',sans-serif">JOEBZ</span>
+    </div>
+    <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+        <?php if ($_SESSION['role'] === 'admin'): ?>
+            <a href="dashboard.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='dashboard.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Dashboard</a>
+            <a href="items.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='items.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Items</a>
+            <a href="categories.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='categories.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Categories</a>
+            <a href="reports.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='reports.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Reports</a>
+            <a href="users.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='users.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Users</a>
+            <a href="purchase_orders.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='purchase_orders.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Purchase Orders</a>
+        <?php endif; ?>
+        <a href="sales.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='sales.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Point of Sale</a>
+    </nav>
+</aside>
+<div class="flex-1 md:ml-64 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <div class="mb-5 md:hidden">
+            <button id="open-sidebar" class="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-medium text-slate-200">Menu</button>
+        </div>
+        <h1 class="text-3xl font-bold">Purchase Orders</h1>
+        <?php if ($msg): ?><p class="mt-3 rounded-lg border border-emerald-700/40 bg-emerald-900/30 px-4 py-2 text-emerald-200 text-sm"><?php echo htmlspecialchars($msg); ?></p><?php endif; ?>
 
-<h3>Existing POs</h3>
-<?php while($po=$po_rows->fetch_assoc()): ?>
-<div style="border:1px solid #ccc;margin:8px;padding:8px;">
-<strong><?php echo htmlspecialchars($po['po_number']); ?></strong> <?php echo htmlspecialchars($po['supplier_name']); ?> (<?php echo $po['status']; ?>)
-<?php if(can_manage_po()): ?>
-<form method="post" style="display:inline"><input type="hidden" name="action" value="submit_po"><input type="hidden" name="po_id" value="<?php echo $po['po_id']; ?>"><button>Submit</button></form>
-<?php endif; ?>
-<form method="post">
-<input type="hidden" name="action" value="post_receipt"><input type="hidden" name="po_id" value="<?php echo $po['po_id']; ?>">
-<input type="datetime-local" name="received_at" value="<?php echo date('Y-m-d\TH:i'); ?>">
-<input name="reference_no" placeholder="ref no"><input name="landed_cost_total" type="number" step="0.0001" placeholder="landed cost total">
-<select name="allocation_method"><option value="value">By Line Value</option><option value="qty">By Qty</option></select>
-<?php $poi = $conn->query('SELECT poi.po_item_id, i.item_name, (poi.ordered_qty-poi.received_qty) remaining FROM purchase_order_items poi JOIN items i ON i.item_id = poi.item_id WHERE poi.po_id='.(int)$po['po_id']); while($r=$poi->fetch_assoc()): ?>
-<div><?php echo htmlspecialchars($r['item_name']); ?> rem=<?php echo $r['remaining']; ?> recv <input type="number" step="0.01" name="recv_<?php echo $r['po_item_id']; ?>"> rej <input type="number" step="0.01" name="rej_<?php echo $r['po_item_id']; ?>"></div>
-<?php endwhile; ?>
-<button>Post Receipt</button>
-</form>
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+            <h2 class="text-lg font-semibold mb-3">Create PO</h2>
+            <form method="post" class="space-y-3">
+                <input type="hidden" name="action" value="create_po" />
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <select name="supplier_id" class="rounded-lg bg-slate-800 border border-slate-700 p-2"><?php while($s=$suppliers->fetch_assoc()){ echo '<option value="'.$s['supplier_id'].'">'.htmlspecialchars($s['supplier_name']).'</option>'; } ?></select>
+                    <input name="expected_at" type="datetime-local" class="rounded-lg bg-slate-800 border border-slate-700 p-2"/>
+                    <input name="currency" value="PHP" class="rounded-lg bg-slate-800 border border-slate-700 p-2"/>
+                </div>
+                <textarea name="notes" placeholder="notes" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2"></textarea>
+                <?php for($i=0;$i<3;$i++): ?>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <select name="item_id[]" class="rounded-lg bg-slate-800 border border-slate-700 p-2"><option value="">item</option><?php $items->data_seek(0); while($it=$items->fetch_assoc()){ echo '<option value="'.$it['item_id'].'">'.htmlspecialchars($it['item_name']).'</option>'; } ?></select>
+                    <input name="ordered_qty[]" type="number" step="0.01" class="rounded-lg bg-slate-800 border border-slate-700 p-2" />
+                    <input name="unit_cost[]" type="number" step="0.0001" class="rounded-lg bg-slate-800 border border-slate-700 p-2" />
+                </div>
+                <?php endfor; ?>
+                <button class="rounded-lg bg-blue-600 hover:bg-blue-500 px-4 py-2 font-medium">Create PO</button>
+            </form>
+        </div>
+
+        <h3 class="mt-8 mb-3 text-xl font-semibold">Existing POs</h3>
+        <?php while($po=$po_rows->fetch_assoc()): ?>
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 mb-3">
+            <strong><?php echo htmlspecialchars($po['po_number']); ?></strong> <?php echo htmlspecialchars($po['supplier_name']); ?> (<?php echo $po['status']; ?>)
+            <?php if(can_manage_po()): ?>
+            <form method="post" class="inline"><input type="hidden" name="action" value="submit_po"><input type="hidden" name="po_id" value="<?php echo $po['po_id']; ?>"><button class="ml-2 rounded bg-indigo-600 px-2 py-1 text-xs">Submit</button></form>
+            <?php endif; ?>
+            <form method="post" class="mt-3 space-y-2">
+                <input type="hidden" name="action" value="post_receipt"><input type="hidden" name="po_id" value="<?php echo $po['po_id']; ?>">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                    <input type="datetime-local" name="received_at" value="<?php echo date('Y-m-d\TH:i'); ?>" class="rounded-lg bg-slate-800 border border-slate-700 p-2">
+                    <input name="reference_no" placeholder="ref no" class="rounded-lg bg-slate-800 border border-slate-700 p-2">
+                    <input name="landed_cost_total" type="number" step="0.0001" placeholder="landed cost total" class="rounded-lg bg-slate-800 border border-slate-700 p-2">
+                    <select name="allocation_method" class="rounded-lg bg-slate-800 border border-slate-700 p-2"><option value="value">By Line Value</option><option value="qty">By Qty</option></select>
+                </div>
+                <?php $poi = $conn->query('SELECT poi.po_item_id, i.item_name, (poi.ordered_qty-poi.received_qty) remaining FROM purchase_order_items poi JOIN items i ON i.item_id = poi.item_id WHERE poi.po_id='.(int)$po['po_id']); while($r=$poi->fetch_assoc()): ?>
+                <div class="text-sm"><?php echo htmlspecialchars($r['item_name']); ?> rem=<?php echo $r['remaining']; ?> recv <input class="rounded bg-slate-800 border border-slate-700 p-1" type="number" step="0.01" name="recv_<?php echo $r['po_item_id']; ?>"> rej <input class="rounded bg-slate-800 border border-slate-700 p-1" type="number" step="0.01" name="rej_<?php echo $r['po_item_id']; ?>"></div>
+                <?php endwhile; ?>
+                <button class="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-2 text-sm">Post Receipt</button>
+            </form>
+        </div>
+        <?php endwhile; ?>
+    </div>
 </div>
-<?php endwhile; ?>
+<script>
+var sidebar = document.getElementById('sidebar');
+var openBtn = document.getElementById('open-sidebar');
+if (openBtn) openBtn.addEventListener('click', function() { sidebar.classList.remove('-translate-x-full'); });
+document.addEventListener('click', function(e) { if (window.innerWidth < 768 && sidebar && openBtn && !sidebar.contains(e.target) && !openBtn.contains(e.target)) sidebar.classList.add('-translate-x-full'); });
+</script>
 </body></html>
