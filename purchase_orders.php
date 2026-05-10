@@ -310,10 +310,7 @@ $po_rows = $conn->query('SELECT po.*, s.supplier_name FROM purchase_orders po JO
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                         <label for="supplier_id" class="block text-sm text-slate-200 mb-1">Supplier</label>
-                        <select id="supplier_id" name="supplier_id" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100">
-                            <option value="">Select supplier</option>
-                            <?php while($s=$suppliers->fetch_assoc()){ echo '<option value="'.$s['supplier_id'].'">'.htmlspecialchars($s['supplier_name']).'</option>'; } ?>
-                        </select>
+                        <input id="supplier_id" name="supplier_id" type="text" placeholder="Enter supplier ID" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100 placeholder-slate-300" />
                     </div>
                     <div>
                         <label for="expected_date" class="block text-sm text-slate-200 mb-1">Expected date/time</label>
@@ -374,9 +371,28 @@ $po_rows = $conn->query('SELECT po.*, s.supplier_name FROM purchase_orders po JO
                     <input name="landed_cost_total" type="number" step="0.0001" placeholder="landed cost total" class="rounded-lg bg-slate-800 border border-slate-700 p-2">
                     <select name="allocation_method" class="rounded-lg bg-slate-800 border border-slate-700 p-2"><option value="value">By Line Value</option><option value="qty">By Qty</option></select>
                 </div>
-                <?php $poi = $conn->query('SELECT poi.po_item_id, i.item_name, (poi.ordered_qty-poi.received_qty) remaining FROM purchase_order_items poi JOIN items i ON i.item_id = poi.item_id WHERE poi.po_id='.(int)$po['po_id']); while($r=$poi->fetch_assoc()): ?>
-                <div class="text-sm"><?php echo htmlspecialchars($r['item_name']); ?> rem=<?php echo $r['remaining']; ?> recv <input class="rounded bg-slate-800 border border-slate-700 p-1" type="number" step="0.01" name="recv_<?php echo $r['po_item_id']; ?>"> rej <input class="rounded bg-slate-800 border border-slate-700 p-1" type="number" step="0.01" name="rej_<?php echo $r['po_item_id']; ?>"></div>
-                <?php endwhile; ?>
+                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40">
+                    <div class="grid min-w-[700px] grid-cols-12 gap-2 border-b border-slate-800 bg-slate-900/70 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-300">
+                        <div class="col-span-5">Item</div>
+                        <div class="col-span-2 text-right">Remaining</div>
+                        <div class="col-span-2 text-right">Receive Qty</div>
+                        <div class="col-span-2 text-right">Reject Qty</div>
+                        <div class="col-span-1 text-right">Unit</div>
+                    </div>
+                    <?php $poi = $conn->query('SELECT poi.po_item_id, i.item_name, i.unit, (poi.ordered_qty-poi.received_qty) remaining FROM purchase_order_items poi JOIN items i ON i.item_id = poi.item_id WHERE poi.po_id='.(int)$po['po_id']); while($r=$poi->fetch_assoc()): ?>
+                    <div class="grid min-w-[700px] grid-cols-12 gap-2 border-b border-slate-800/70 px-3 py-2 text-sm text-slate-200 last:border-b-0">
+                        <div class="col-span-5"><?php echo htmlspecialchars($r['item_name']); ?></div>
+                        <div class="col-span-2 text-right tabular-nums"><?php echo number_format((float)$r['remaining'], 2); ?></div>
+                        <div class="col-span-2">
+                            <input class="w-full rounded bg-slate-800 border border-slate-700 p-1 text-right tabular-nums placeholder-slate-400" type="number" step="0.01" placeholder="0.00" name="recv_<?php echo $r['po_item_id']; ?>">
+                        </div>
+                        <div class="col-span-2">
+                            <input class="w-full rounded bg-slate-800 border border-slate-700 p-1 text-right tabular-nums placeholder-slate-400" type="number" step="0.01" placeholder="0.00" name="rej_<?php echo $r['po_item_id']; ?>">
+                        </div>
+                        <div class="col-span-1 text-right text-slate-400"><?php echo htmlspecialchars($r['unit'] ?: '—'); ?></div>
+                    </div>
+                    <?php endwhile; ?>
+                </div>
                 <button class="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-2 text-sm">Post Receipt</button>
             </form>
         </div>
