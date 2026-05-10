@@ -71,6 +71,48 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         while ($row = $result->fetch_assoc()) {
             fputcsv($output, [$row['category_name'], $row['transactions'], $row['items_sold'], number_format($row['revenue'], 2)]);
         }
+    } elseif ($export_type === 'discounts') {
+        fputcsv($output, ['LOG ID', 'REQUEST DATE', 'CASHIER', 'DISCOUNT TYPE', 'DISCOUNT %', 'DISCOUNT AMOUNT (₱)', 'REASON', 'STATUS', 'APPROVER', 'APPROVAL DATE', 'REJECTION REASON']);
+        $stmt = $conn->prepare("
+            SELECT 
+                l.log_id,
+                l.request_time,
+                l.discount_type,
+                l.discount_percent,
+                l.discount_amount,
+                l.reason,
+                l.status,
+                l.approval_time,
+                l.rejection_reason,
+                cashier.first_name AS cashier_first_name,
+                cashier.last_name AS cashier_last_name,
+                approver.first_name AS approver_first_name,
+                approver.last_name AS approver_last_name
+            FROM discount_logs l
+            JOIN users cashier ON l.cashier_id = cashier.user_id
+            LEFT JOIN users approver ON l.approver_id = approver.user_id
+            WHERE DATE(l.request_time) BETWEEN ? AND ?
+            ORDER BY l.request_time DESC
+        ");
+        $stmt->bind_param("ss", $start_date, $end_date);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $approver_name = trim(($row['approver_first_name'] ?? '') . ' ' . ($row['approver_last_name'] ?? ''));
+            fputcsv($output, [
+                $row['log_id'],
+                $row['request_time'] ? date('Y-m-d H:i:s', strtotime($row['request_time'])) : 'N/A',
+                trim($row['cashier_first_name'] . ' ' . $row['cashier_last_name']),
+                strtoupper($row['discount_type']),
+                number_format((float)$row['discount_percent'], 2),
+                number_format((float)$row['discount_amount'], 2),
+                $row['reason'] ?? 'N/A',
+                strtoupper($row['status']),
+                $approver_name !== '' ? $approver_name : 'N/A',
+                $row['approval_time'] ? date('Y-m-d H:i:s', strtotime($row['approval_time'])) : 'N/A',
+                $row['rejection_reason'] ?? 'N/A'
+            ]);
+        }
     }
     fclose($output);
     exit;
@@ -443,7 +485,7 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
                      each <a> gets height/min-height/max-height + box-sizing to prevent
                      content or browser defaults from stretching the first row taller. ═══ -->
                 <style>
-                    .export-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 40px 40px; gap: 12px; align-items: stretch; }
+                    .export-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 40px); gap: 12px; align-items: stretch; }
                     .export-grid a { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 100%; box-sizing: border-box; border-radius: 12px; font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-decoration: none; transition: transform 0.18s ease, box-shadow 0.18s ease; }
                     .export-grid a:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
                 </style>
@@ -471,6 +513,10 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
                     <a href="?export=csv&export_type=category&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.2);color:#fda4af;">
                         <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                         By Category
+                    </a>
+                    <a href="?export=csv&export_type=discounts&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(14,165,233,0.1);border:1px solid rgba(14,165,233,0.2);color:#7dd3fc;">
+                        <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5-1h.01M14 17h.01M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+                        Discounts
                     </a>
                 </div>
                 <p class="text-xs text-slate-600 mt-4">Compatible with Excel, Google Sheets, and LibreOffice.</p>
