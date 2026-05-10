@@ -146,15 +146,51 @@ $po_rows = $conn->query('SELECT po.*, s.supplier_name FROM purchase_orders po JO
     </div>
     <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
         <?php if ($_SESSION['role'] === 'admin'): ?>
-            <a href="dashboard.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='dashboard.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Dashboard</a>
-            <a href="items.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='items.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Items</a>
-            <a href="categories.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='categories.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Categories</a>
-            <a href="reports.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='reports.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Reports</a>
-            <a href="users.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='users.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Users</a>
-            <a href="purchase_orders.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='purchase_orders.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Purchase Orders</a>
+            <a href="dashboard.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='dashboard.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                Dashboard
+            </a>
+            <a href="items.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='items.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/></svg>
+                Items
+            </a>
+            <a href="categories.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='categories.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                Categories
+            </a>
+            <a href="reports.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='reports.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                Reports
+            </a>
+            <a href="users.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='users.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                Users
+            </a>
+            <a href="purchase_orders.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='purchase_orders.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                Purchase Orders
+            </a>
         <?php endif; ?>
-        <a href="sales.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='sales.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">Point of Sale</a>
+        <a href="sales.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='sales.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            Point of Sale
+        </a>
     </nav>
+    <div class="px-4 py-4 border-t border-slate-800">
+        <div class="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-900 mb-2">
+            <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                <?= strtoupper(substr($_SESSION['first_name'], 0, 1)) ?>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-100"><?= htmlspecialchars($_SESSION['first_name']) ?></p>
+                <p class="text-xs text-slate-400 capitalize"><?= $_SESSION['role'] ?></p>
+            </div>
+        </div>
+        <a href="logout.php" class="flex items-center gap-3 px-3 py-2 rounded-xl text-red-300 hover:bg-red-900/40 text-sm transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            Logout
+        </a>
+    </div>
 </aside>
 <div class="flex-1 md:ml-64 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
@@ -169,16 +205,43 @@ $po_rows = $conn->query('SELECT po.*, s.supplier_name FROM purchase_orders po JO
             <form method="post" class="space-y-3">
                 <input type="hidden" name="action" value="create_po" />
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <select name="supplier_id" class="rounded-lg bg-slate-800 border border-slate-700 p-2"><?php while($s=$suppliers->fetch_assoc()){ echo '<option value="'.$s['supplier_id'].'">'.htmlspecialchars($s['supplier_name']).'</option>'; } ?></select>
-                    <input name="expected_at" type="datetime-local" class="rounded-lg bg-slate-800 border border-slate-700 p-2"/>
-                    <input name="currency" value="PHP" class="rounded-lg bg-slate-800 border border-slate-700 p-2"/>
+                    <div>
+                        <label for="supplier_id" class="block text-sm text-slate-200 mb-1">Supplier</label>
+                        <select id="supplier_id" name="supplier_id" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100">
+                            <option value="">Select supplier</option>
+                            <?php while($s=$suppliers->fetch_assoc()){ echo '<option value="'.$s['supplier_id'].'">'.htmlspecialchars($s['supplier_name']).'</option>'; } ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="expected_at" class="block text-sm text-slate-200 mb-1">Expected date/time</label>
+                        <input id="expected_at" name="expected_at" type="datetime-local" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100"/>
+                    </div>
+                    <div>
+                        <label for="currency" class="block text-sm text-slate-200 mb-1">Currency</label>
+                        <input id="currency" name="currency" value="PHP" placeholder="e.g. PHP" maxlength="3" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100 placeholder-slate-300"/>
+                    </div>
                 </div>
-                <textarea name="notes" placeholder="notes" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2"></textarea>
+                <div>
+                    <label for="po_notes" class="block text-sm text-slate-200 mb-1">Notes</label>
+                    <textarea id="po_notes" name="notes" placeholder="Add purchase order notes" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100 placeholder-slate-300"></textarea>
+                </div>
                 <?php for($i=0;$i<3;$i++): ?>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <select name="item_id[]" class="rounded-lg bg-slate-800 border border-slate-700 p-2"><option value="">item</option><?php $items->data_seek(0); while($it=$items->fetch_assoc()){ echo '<option value="'.$it['item_id'].'">'.htmlspecialchars($it['item_name']).'</option>'; } ?></select>
-                    <input name="ordered_qty[]" type="number" step="0.01" class="rounded-lg bg-slate-800 border border-slate-700 p-2" />
-                    <input name="unit_cost[]" type="number" step="0.0001" class="rounded-lg bg-slate-800 border border-slate-700 p-2" />
+                    <div>
+                        <label for="item_id_<?= $i ?>" class="block text-sm text-slate-200 mb-1">Item</label>
+                        <select id="item_id_<?= $i ?>" name="item_id[]" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100">
+                            <option value="">Select item</option>
+                            <?php $items->data_seek(0); while($it=$items->fetch_assoc()){ echo '<option value="'.$it['item_id'].'">'.htmlspecialchars($it['item_name']).'</option>'; } ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ordered_qty_<?= $i ?>" class="block text-sm text-slate-200 mb-1">Ordered quantity</label>
+                        <input id="ordered_qty_<?= $i ?>" name="ordered_qty[]" type="number" step="0.01" min="0" placeholder="Qty (e.g. 10.5)" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100 placeholder-slate-300" />
+                    </div>
+                    <div>
+                        <label for="unit_cost_<?= $i ?>" class="block text-sm text-slate-200 mb-1">Unit cost</label>
+                        <input id="unit_cost_<?= $i ?>" name="unit_cost[]" type="number" step="0.0001" min="0" placeholder="Unit cost (e.g. 125.75)" class="w-full rounded-lg bg-slate-800 border border-slate-700 p-2 text-slate-100 placeholder-slate-300" />
+                    </div>
                 </div>
                 <?php endfor; ?>
                 <button class="rounded-lg bg-blue-600 hover:bg-blue-500 px-4 py-2 font-medium">Create PO</button>
