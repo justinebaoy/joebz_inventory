@@ -285,7 +285,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['last_sale_id'] ?? null);
+// FIX: Only show Print Receipt button when sale_id is explicitly in the URL
+// (not from session), so discount actions never show the button.
+$last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -307,7 +309,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
         h1, h2, .display { font-family: 'Syne', sans-serif; }
         .mono { font-family: 'DM Mono', monospace; }
 
-        /* Staggered card reveal — identical to dashboard */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(18px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -322,7 +323,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
         .reveal-7  { animation-delay: 0.38s; }
         .reveal-8  { animation-delay: 0.46s; }
 
-        /* Loading overlay */
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); display: none;
@@ -341,7 +341,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
         }
         .modal-panel { animation: modalIn 0.25s ease both; }
 
-        /* Product cards */
         .product-card {
             transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
             cursor: pointer;
@@ -352,7 +351,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
             border-color: var(--accent);
         }
 
-        /* Discount badge */
         .discount-badge {
             background: var(--warn); color: #000;
             font-size: 0.65rem; padding: 0.15rem 0.5rem;
@@ -360,11 +358,9 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
             font-family: 'DM Mono', monospace;
         }
 
-        /* Cart item hover */
         .cart-item { transition: background 0.15s ease; }
         .cart-item:hover { background: rgba(255,255,255,0.03); }
 
-        /* Pulse dot — same as dashboard live indicator */
         @keyframes pulse-ring {
             0%   { transform: scale(0.8); opacity: 1; }
             100% { transform: scale(1.8); opacity: 0; }
@@ -379,12 +375,10 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
             border-radius: 50%; background: var(--up); display: inline-block;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
 
-        /* Input focus glow */
         .input-field {
             width: 100%; background: rgba(30,41,59,0.8);
             border: 1px solid #334155; border-radius: 0.75rem;
@@ -399,7 +393,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
         }
         .input-field::placeholder { color: #475569; }
 
-        /* Promotion strip */
         .promo-chip {
             display: flex; align-items: center; gap: 0.5rem;
             padding: 0.375rem 0.75rem;
@@ -410,7 +403,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
         }
         .promo-chip:hover { border-color: #475569; }
 
-        /* Process button glow */
         .btn-process {
             background: linear-gradient(135deg, #059669, #10b981);
             box-shadow: 0 4px 20px rgba(16,185,129,0.25);
@@ -432,7 +424,7 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
     <div class="loading-spinner"></div>
 </div>
 
-<!-- ═══════════ SIDEBAR — identical to dashboard ═══════════ -->
+<!-- ═══════════ SIDEBAR ═══════════ -->
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 transform bg-slate-950 border-r border-slate-800 flex flex-col transition-transform duration-200 ease-out -translate-x-full md:translate-x-0">
     <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800">
         <img src="assets/logo.png" alt="JOEBZ Logo" class="w-10 h-10 rounded-xl object-cover">
@@ -495,7 +487,7 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
             <a href="logout.php" class="text-sm text-red-300 border border-red-800/40 bg-red-900/20 px-3 py-2 rounded-xl">Logout</a>
         </div>
 
-        <!-- Page header — mirrors dashboard header -->
+        <!-- Page header -->
         <div class="mb-8 flex items-start justify-between reveal reveal-1">
             <div>
                 <h1 class="text-3xl font-bold text-white tracking-tight">Point of Sale</h1>
@@ -504,7 +496,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
                     &nbsp;·&nbsp; <?= date('l, F j, Y') ?>
                 </p>
             </div>
-            <!-- Live indicator -->
             <div class="flex items-center gap-2 text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
                 <span class="live-dot"></span>
                 <span id="liveTime" class="mono"></span>
@@ -519,7 +510,7 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
                 <span><?= htmlspecialchars($success) ?></span>
             </div>
             <?php if ($last_sale_id): ?>
-            <button onclick="window.open('print_receipt.php?id=<?= $last_sale_id ?>', '_blank')" class="flex items-center gap-1.5 bg-blue-600/80 hover:bg-blue-500 px-3 py-1.5 rounded-lg text-xs font-medium transition shrink-0">
+            <button onclick="openReceiptModal(<?= $last_sale_id ?>)" class="flex items-center gap-1.5 bg-blue-600/80 hover:bg-blue-500 px-3 py-1.5 rounded-lg text-xs font-medium transition shrink-0">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 Print Receipt
             </button>
@@ -607,22 +598,18 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
             <div class="lg:col-span-2 reveal reveal-3">
                 <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
 
-                    <!-- Search header -->
                     <div class="px-5 py-4 border-b border-slate-800 flex items-center gap-3">
                         <div class="relative flex-1">
                             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                            <input type="text" id="searchProduct" placeholder="Search products…"
-                                class="input-field pl-9 text-sm">
+                            <input type="text" id="searchProduct" placeholder="Search products…" class="input-field pl-9 text-sm">
                         </div>
                         <span class="text-xs text-slate-500 bg-slate-800 border border-slate-700 px-2.5 py-1.5 rounded-xl mono whitespace-nowrap">
                             <?= $items->num_rows ?> items
                         </span>
                     </div>
 
-                    <!-- Product grid -->
                     <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[600px] overflow-y-auto">
                         <?php
-                        // Reset pointer since we already iterated
                         $items->data_seek(0);
                         while ($item = $items->fetch_assoc()):
                             $discount        = $productDiscountMap[$item['item_id']] ?? 0;
@@ -636,7 +623,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
                             <div class="absolute top-3 right-3"><span class="discount-badge"><?= $discount ?>% OFF</span></div>
                             <?php endif; ?>
 
-                            <!-- Subtle gradient accent -->
                             <?php if ($discount): ?>
                             <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none rounded-xl"></div>
                             <?php endif; ?>
@@ -678,7 +664,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
             <div class="reveal reveal-4">
                 <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden sticky top-6">
 
-                    <!-- Cart header -->
                     <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
                             <h2 class="text-base font-bold text-white" style="font-family:'Syne',sans-serif">Cart</h2>
@@ -697,7 +682,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
                         <?php endif; ?>
                     </div>
 
-                    <!-- Cart items -->
                     <div class="max-h-64 overflow-y-auto">
                         <?php if (empty($_SESSION['cart'])): ?>
                         <div class="flex flex-col items-center justify-center py-12 text-slate-600">
@@ -755,7 +739,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
                             <div id="customerResults" class="hidden absolute z-20 left-0 right-0 top-full mt-1 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl max-h-48 overflow-y-auto"></div>
                         </div>
 
-                        <!-- Customer badge -->
                         <div id="customerBadge" class="hidden px-2.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5"></div>
 
                         <input type="hidden" id="customerId">
@@ -774,7 +757,6 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
                                 class="input-field pl-7 text-lg mono font-bold">
                         </div>
 
-                        <!-- Change display -->
                         <div id="changeDisplay" class="hidden bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-slate-400">Change</span>
@@ -799,8 +781,30 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
 </div><!-- /main -->
 
 
-<!-- ═══════════ MODALS — styled to match dashboard dark theme ═══════════ -->
+<!-- ═══════════ RECEIPT MODAL ═══════════ -->
+<div id="receiptModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="modal-panel bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col" style="max-height:90vh">
+        <div class="flex items-center justify-between px-5 py-3 border-b border-gray-200 shrink-0">
+            <span class="font-bold text-gray-800 text-sm" style="font-family:'Syne',sans-serif">Receipt Preview</span>
+            <div class="flex items-center gap-2">
+                <button onclick="printReceiptFrame()"
+                    class="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                    </svg>
+                    Print
+                </button>
+                <button onclick="closeReceiptModal()"
+                    class="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-800 text-lg leading-none transition font-medium">&times;</button>
+            </div>
+        </div>
+        <iframe id="receiptFrame" src="" class="flex-1 rounded-b-2xl" style="min-height:500px; border:none;"></iframe>
+    </div>
+</div>
 
+
+<!-- ═══════════ MODALS ═══════════ -->
 <?php if ($isManager): ?>
 
 <!-- DELETE DISCOUNT MODAL -->
@@ -934,7 +938,7 @@ $last_sale_id = isset($_GET['sale_id']) ? (int)$_GET['sale_id'] : ($_SESSION['la
 
 
 <script>
-// ── Sidebar toggle (mirrors dashboard) ────────────────────────────────────
+// ── Sidebar toggle ─────────────────────────────────────────────────────────
 var sidebar = document.getElementById('sidebar');
 var openBtn = document.getElementById('open-sidebar');
 function openSidebar()  { sidebar.classList.remove('-translate-x-full'); }
@@ -951,7 +955,7 @@ window.addEventListener('resize', function () {
     else sidebar.classList.add('-translate-x-full');
 });
 
-// ── Live clock (mirrors dashboard) ────────────────────────────────────────
+// ── Live clock ─────────────────────────────────────────────────────────────
 function updateClock() {
     var el = document.getElementById('liveTime');
     if (el) el.textContent = new Date().toLocaleTimeString('en-PH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -970,15 +974,44 @@ setTimeout(function () {
     });
 }, 5000);
 
+// ── Receipt Modal ──────────────────────────────────────────────────────────
+function openReceiptModal(saleId) {
+    var modal = document.getElementById('receiptModal');
+    var frame = document.getElementById('receiptFrame');
+    frame.src = 'print_receipt.php?id=' + saleId;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+function closeReceiptModal() {
+    var modal = document.getElementById('receiptModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.getElementById('receiptFrame').src = '';
+}
+function printReceiptFrame() {
+    var frame = document.getElementById('receiptFrame');
+    if (frame && frame.contentWindow) {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+    }
+}
+document.getElementById('receiptModal')?.addEventListener('click', function (e) {
+    if (e.target === this) closeReceiptModal();
+});
+
 // ── Delete Discount Modal ──────────────────────────────────────────────────
 function confirmDeleteDiscount(id, percent, target, type) {
     document.getElementById('ddModalPercent').textContent = '-' + percent + '%';
     document.getElementById('ddModalTarget').textContent  = target;
     document.getElementById('ddModalType').textContent    = type;
-    document.getElementById('ddModalConfirmBtn').onclick  = function () {
+
+    // FIX: Capture form reference BEFORE closing modal to avoid DOM race
+    document.getElementById('ddModalConfirmBtn').onclick = function () {
+        var form = document.getElementById('delete-discount-form-' + id);
         closeDeleteDiscountModal();
-        document.getElementById('delete-discount-form-' + id).submit();
+        setTimeout(function () { if (form) form.submit(); }, 80);
     };
+
     var panel = document.getElementById('deleteDiscountPanel');
     panel.style.animation = 'none'; panel.offsetHeight; panel.style.animation = '';
     var modal = document.getElementById('deleteDiscountModal');
@@ -988,7 +1021,7 @@ function closeDeleteDiscountModal() {
     var modal = document.getElementById('deleteDiscountModal');
     if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
 }
-document.getElementById('deleteDiscountModal')?.addEventListener('click', function(e) {
+document.getElementById('deleteDiscountModal')?.addEventListener('click', function (e) {
     if (e.target === this) closeDeleteDiscountModal();
 });
 
@@ -1048,8 +1081,14 @@ function closeEditModal() {
     if (m) m.style.display = 'none';
 }
 
+// ── ESC closes all modals ──────────────────────────────────────────────────
 document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { closeAddModal(); closeEditModal(); closeDeleteDiscountModal(); }
+    if (e.key === 'Escape') {
+        closeAddModal();
+        closeEditModal();
+        closeDeleteDiscountModal();
+        closeReceiptModal();
+    }
 });
 
 // ── Product search ─────────────────────────────────────────────────────────
