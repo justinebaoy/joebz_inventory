@@ -1,3 +1,5 @@
 <?php
-require_once __DIR__ . '/purchase_order.php';
+header('Location: purchase_order.php', true, 301);
+exit;
+
 ?>
