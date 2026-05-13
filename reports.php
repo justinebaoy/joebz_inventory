@@ -62,6 +62,26 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         while ($row = $result->fetch_assoc()) {
             fputcsv($output, [$row['user_id'], $row['first_name'] . ' ' . $row['last_name'], $row['username'], $row['email'], ucfirst($row['role']), date('Y-m-d', strtotime($row['created_at']))]);
         }
+    } elseif ($export_type === 'discounts') {
+        fputcsv($output, ['REQUEST ID', 'REQUESTED AT', 'STATUS', 'DISCOUNT TYPE', 'DISCOUNT %', 'DISCOUNT AMOUNT (₱)', 'CASHIER', 'APPROVED/REJECTED BY', 'REASON']);
+        $stmt = $conn->prepare("SELECT l.log_id, l.request_time, l.status, l.discount_type, l.discount_percent, l.discount_amount, CONCAT(c.first_name, ' ', c.last_name) AS cashier_name, CONCAT(a.first_name, ' ', a.last_name) AS approver_name, l.reason FROM discount_logs l JOIN users c ON l.cashier_id = c.user_id LEFT JOIN users a ON l.approver_id = a.user_id WHERE DATE(l.request_time) BETWEEN ? AND ? ORDER BY l.request_time DESC");
+        $stmt->bind_param("ss", $start_date, $end_date);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            fputcsv($output, [
+                $row['log_id'],
+                date('Y-m-d H:i:s', strtotime($row['request_time'])),
+                ucfirst($row['status']),
+                strtoupper($row['discount_type']),
+                number_format($row['discount_percent'], 2),
+                number_format($row['discount_amount'], 2),
+                $row['cashier_name'],
+                $row['approver_name'] ?: '—',
+                $row['reason'] ?: '—'
+            ]);
+        }
+        $stmt->close();
     } elseif ($export_type === 'category') {
         fputcsv($output, ['CATEGORY', 'TOTAL TRANSACTIONS', 'ITEMS SOLD', 'TOTAL REVENUE (₱)']);
         $stmt = $conn->prepare("SELECT c.category_name, COUNT(DISTINCT s.sale_id) as transactions, SUM(si.quantity) as items_sold, SUM(si.quantity * si.price) as revenue FROM sale_items si JOIN items i ON si.item_id = i.item_id JOIN categories c ON i.category_id = c.category_id JOIN sales s ON si.sale_id = s.sale_id WHERE DATE(s.sale_date) BETWEEN ? AND ? GROUP BY c.category_id, c.category_name ORDER BY revenue DESC");
@@ -272,6 +292,10 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                 Reports
             </a>
+            <a href="purchase_order.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='purchase_order.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                Purchase Orders
+            </a>
             <a href="users.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='users.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 Users
@@ -471,6 +495,10 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
                     <a href="?export=csv&export_type=category&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.2);color:#fda4af;">
                         <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                         By Category
+                    </a>
+                    <a href="?export=csv&export_type=discounts&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86efac;">
+                        <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5 0h.01m4.99 5h.01M7 21h10a2 2 0 002-2V7a2 2 0 00-2-2h-2l-2-2h-2L9 5H7a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        Discounts
                     </a>
                 </div>
                 <p class="text-xs text-slate-600 mt-4">Compatible with Excel, Google Sheets, and LibreOffice.</p>
