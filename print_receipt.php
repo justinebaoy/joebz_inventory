@@ -99,7 +99,7 @@ $total = $sale['total_amount'];
     </div>
     <hr>
     <div class="barcode"><?= str_pad($sale_id,8,'0',STR_PAD_LEFT) ?></div>
-    <div class="thankyou">Thank you for shopping at JOEBZ!<br>☑ Items sold are non-returnable<br>⭐ Follow us on Facebook: @joebzstore</div>
+    <div class="thankyou">Thank you for shopping at JOEBZ!<br>☑ Items sold are non-returnable<br>Follow us on Facebook: @joebzstore</div>
 </div>
 <div class="no-print"><button class="btn-print" onclick="window.print()">🖨️ Print Receipt</button><button class="btn-close" onclick="window.close()">✖ Close</button></div>
 <script>setTimeout(function(){window.print();},500);</script>
