@@ -23,7 +23,6 @@ function validate_po_transition($from, $to) {
     return in_array($to, $allowed[$from] ?? [], true);
 }
 
-// ── Parse a date+time pair from POST ───────────────────────────────────────
 function parse_datetime($date_key, $time_key, $legacy_key, $default_now = false) {
     $date   = trim($_POST[$date_key]   ?? '');
     $time   = trim($_POST[$time_key]   ?? '');
@@ -59,31 +58,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($supplier_id <= 0) {
             $msg = 'Please select a supplier.'; $msg_type = 'error';
         } else {
-        $stmt = $conn->prepare('INSERT INTO purchase_orders (po_number,supplier_id,expected_at,currency,notes,created_by) VALUES (?,?,?,?,?,?)');
-        $stmt->bind_param('sisssi', $po_number, $supplier_id, $expected_at, $currency, $notes, $_SESSION['user_id']);
-        $stmt->execute();
-        $po_id = $conn->insert_id;
-        $stmt->close();
+            $stmt = $conn->prepare('INSERT INTO purchase_orders (po_number,supplier_id,expected_at,currency,notes,created_by) VALUES (?,?,?,?,?,?)');
+            $stmt->bind_param('sisssi', $po_number, $supplier_id, $expected_at, $currency, $notes, $_SESSION['user_id']);
+            $stmt->execute();
+            $po_id = $conn->insert_id;
+            $stmt->close();
 
-        $item_ids = $_POST['item_id']      ?? [];
-        $qtys     = $_POST['ordered_qty']  ?? [];
-        $costs    = $_POST['unit_cost']    ?? [];
-        $saved    = 0;
+            $item_ids   = $_POST['item_id']      ?? [];
+            $qtys       = $_POST['ordered_qty']  ?? [];
+            $costs      = $_POST['unit_cost']    ?? [];
+            $line_notes = $_POST['line_note']    ?? [];
+            $saved = 0;
 
-        foreach ($item_ids as $i => $item_id) {
-            $q = (float)($qtys[$i]  ?? 0);
-            $c = (float)($costs[$i] ?? 0);
-            if ($item_id && $q > 0) {
-                $lt  = $q * $c;
-                $ins = $conn->prepare('INSERT INTO purchase_order_items (po_id,item_id,ordered_qty,unit_cost,tax,discount,line_total) VALUES (?,?,?,?,0,0,?)');
-                $ins->bind_param('iiddd', $po_id, $item_id, $q, $c, $lt);
-                $ins->execute();
-                $ins->close();
-                $saved++;
+            foreach ($item_ids as $i => $item_id) {
+                $q  = (float)($qtys[$i]  ?? 0);
+                $c  = (float)($costs[$i] ?? 0);
+                $ln = trim($line_notes[$i] ?? '') ?: null;
+                if ($item_id && $q > 0) {
+                    $lt  = $q * $c;
+                    $ins = $conn->prepare('INSERT INTO purchase_order_items (po_id,item_id,ordered_qty,unit_cost,tax,discount,line_total,line_note) VALUES (?,?,?,?,0,0,?,?)');
+                    $ins->bind_param('iiddds', $po_id, $item_id, $q, $c, $lt, $ln);
+                    $ins->execute();
+                    $ins->close();
+                    $saved++;
+                }
             }
-        }
-        $msg      = "PO <strong>{$po_number}</strong> created with {$saved} line item(s).";
-        $msg_type = 'success';
+            $msg      = "PO <strong>{$po_number}</strong> created with {$saved} line item(s).";
+            $msg_type = 'success';
         }
     }
 
@@ -181,7 +182,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $ch->execute(); $ch->close();
             }
 
-            // Update PO status
             $sr   = $conn->query("SELECT SUM(ordered_qty) o, SUM(received_qty) r FROM purchase_order_items WHERE po_id={$po_id}")->fetch_assoc();
             $next = ((float)$sr['r'] <= 0) ? 'submitted'
                   : (((float)$sr['r'] < (float)$sr['o']) ? 'partial_received' : 'received');
@@ -193,18 +193,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ══════════════════════════════════════════════════════════════════════════
+// ADD line_note COLUMN IF IT DOESN'T EXIST YET
+// ══════════════════════════════════════════════════════════════════════════
+$col_check = $conn->query("SHOW COLUMNS FROM purchase_order_items LIKE 'line_note'");
+if ($col_check->num_rows === 0) {
+    $conn->query("ALTER TABLE purchase_order_items ADD COLUMN line_note VARCHAR(255) NULL DEFAULT NULL AFTER line_total");
+}
+
+// ══════════════════════════════════════════════════════════════════════════
 // DATA FETCHING
 // ══════════════════════════════════════════════════════════════════════════
-
-// FIX: fetch suppliers fresh (not consumed by earlier loop)
 $suppliers = $conn->query('SELECT supplier_id, supplier_name FROM suppliers WHERE status="active" ORDER BY supplier_name');
 
-// FIX: fetch items into array once, reuse everywhere
+// Fetch items with last purchase price per item
 $items_arr = [];
-$ir = $conn->query('SELECT item_id, item_name FROM items ORDER BY item_name');
+$ir = $conn->query('
+    SELECT i.item_id, i.item_name, i.stock,
+           (SELECT unit_cost FROM purchase_order_items poi2
+            WHERE poi2.item_id = i.item_id
+            ORDER BY poi2.created_at DESC LIMIT 1) AS last_cost
+    FROM items i
+    ORDER BY i.item_name
+');
 while ($it = $ir->fetch_assoc()) $items_arr[] = $it;
 
-// PO list with summary stats
 $po_rows = $conn->query('
     SELECT po.*, s.supplier_name,
            (SELECT COUNT(*) FROM purchase_order_items WHERE po_id = po.po_id) AS item_count,
@@ -215,7 +227,6 @@ $po_rows = $conn->query('
     LIMIT 100
 ');
 
-// Status config
 $status_cfg = [
     'draft'            => ['label'=>'Draft',     'ring'=>'border-slate-600',      'bg'=>'bg-slate-800',       'text'=>'text-slate-300',   'dot'=>'bg-slate-400'],
     'submitted'        => ['label'=>'Submitted',  'ring'=>'border-blue-500/40',    'bg'=>'bg-blue-500/10',     'text'=>'text-blue-300',    'dot'=>'bg-blue-400'],
@@ -230,16 +241,22 @@ function status_badge($st, $cfg) {
     return "<span class=\"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border {$c['ring']} {$c['bg']} {$c['text']}\"><span class=\"w-1.5 h-1.5 rounded-full {$c['dot']} shrink-0\"></span>{$c['label']}</span>";
 }
 
-// Build supplier options once
+// Line item status helper
+function line_status_badge($ordered, $received) {
+    $o = (float)$ordered; $r = (float)$received;
+    if ($r <= 0)      return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-slate-800 border border-slate-700 text-slate-400"><span class="w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0"></span>Pending</span>';
+    if ($r < $o)      return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 border border-amber-500/30 text-amber-300"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>Partial</span>';
+    return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>Complete</span>';
+}
+
 $supplier_opts = '<option value="">— Select supplier —</option>';
 while ($s = $suppliers->fetch_assoc()) {
     $supplier_opts .= '<option value="' . $s['supplier_id'] . '">' . htmlspecialchars($s['supplier_name']) . '</option>';
 }
 
-// Build item options once
 $item_opts = '<option value="">— Select item —</option>';
 foreach ($items_arr as $it) {
-    $item_opts .= '<option value="' . $it['item_id'] . '">' . htmlspecialchars($it['item_name']) . '</option>';
+    $item_opts .= '<option value="' . $it['item_id'] . '" data-last-cost="' . (float)($it['last_cost'] ?? 0) . '" data-stock="' . (int)$it['stock'] . '">' . htmlspecialchars($it['item_name']) . '</option>';
 }
 ?>
 <!DOCTYPE html>
@@ -258,16 +275,10 @@ foreach ($items_arr as $it) {
         --down:        #f43f5e;
         --warn:        #f59e0b;
     }
-
-    /* Sidebar: system font (consistent with all other pages) */
-
-
-    /* Main content: DM Sans + Syne headings */
     body { font-family: 'DM Sans', sans-serif; }
     h1, h2, h3, .display { font-family: 'Syne', sans-serif; }
     .mono { font-family: 'DM Mono', monospace; }
 
-    /* Staggered reveal */
     @keyframes slideUp {
         from { opacity: 0; transform: translateY(18px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -279,18 +290,15 @@ foreach ($items_arr as $it) {
     .reveal-4 { animation-delay: .22s; }
     .reveal-5 { animation-delay: .28s; }
 
-    /* Loading overlay */
     .loading-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); display:none; align-items:center; justify-content:center; z-index:1000; }
     .loading-spinner  { border:4px solid #334155; border-top-color:#3b82f6; border-radius:50%; width:48px; height:48px; animation:spin .8s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* Accordion */
     .accordion-panel { max-height:0; overflow:hidden; transition:max-height .38s cubic-bezier(.4,0,.2,1); }
     .accordion-panel.open { max-height:2400px; }
     .chevron { transition:transform .25s ease; }
     .chevron.open { transform:rotate(180deg); }
 
-    /* Input style */
     .input-field {
         width:100%; background:rgba(30,41,59,.85);
         border:1px solid #334155; border-radius:.75rem;
@@ -303,15 +311,12 @@ foreach ($items_arr as $it) {
     .input-field::placeholder { color:#475569; }
     select.input-field option { background:#1e293b; }
 
-    /* PO card */
     .po-card { transition:border-color .18s, box-shadow .18s; }
     .po-card:hover { border-color:#334155; box-shadow:0 4px 24px rgba(0,0,0,.35); }
 
-    /* Filter tabs */
     .ftab { transition:all .15s; }
     .ftab.active { background:#1e40af; color:#bfdbfe; border-color:#3b82f6; }
 
-    /* Live pulse dot */
     @keyframes pulse-ring {
         0%   { transform:scale(.8); opacity:1; }
         100% { transform:scale(1.8); opacity:0; }
@@ -319,24 +324,54 @@ foreach ($items_arr as $it) {
     .live-dot { position:relative; width:8px; height:8px; border-radius:50%; background:var(--up); display:inline-block; }
     .live-dot::after { content:''; display:block; position:absolute; inset:0; border-radius:50%; background:var(--up); animation:pulse-ring 1.6s ease infinite; }
 
-    /* Scrollbar */
     ::-webkit-scrollbar { width:5px; height:5px; }
     ::-webkit-scrollbar-track { background:transparent; }
     ::-webkit-scrollbar-thumb { background:#334155; border-radius:9999px; }
 
-    /* Item row animation */
     @keyframes itemFade { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
     .item-row { animation:itemFade .18s ease both; }
 
-    /* Custom confirm modal */
     @keyframes modalIn { from{opacity:0;transform:scale(.95) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
 
-    /* Stat cards on header row */
-    .stat-pill {
-        display:flex; align-items:center; gap:.5rem;
-        background:rgba(15,23,42,.6); border:1px solid #1e293b;
-        border-radius:1rem; padding:.5rem 1rem;
+    /* Progress bar */
+    .recv-bar-track { background:#1e293b; border-radius:9999px; height:6px; overflow:hidden; }
+    .recv-bar-fill  { height:6px; border-radius:9999px; transition:width .4s ease; }
+
+    /* Last cost hint */
+    .last-cost-hint {
+        font-size:10px; color:#64748b; margin-top:2px;
+        transition:color .15s;
     }
+    .last-cost-hint.has-cost { color:#f59e0b; }
+
+    /* Line subtotal chip */
+    .line-subtotal {
+        font-family:'DM Mono',monospace;
+        font-size:11px;
+        color:#94a3b8;
+        background:rgba(30,41,59,.9);
+        border:1px solid #334155;
+        border-radius:.5rem;
+        padding:2px 8px;
+        white-space:nowrap;
+        transition:color .15s;
+    }
+    .line-subtotal.has-value { color:#34d399; border-color:rgba(52,211,153,.25); }
+
+    /* Note field soft styling */
+    .note-field {
+        background:rgba(15,23,42,.6);
+        border:1px solid #1e293b;
+        border-radius:.5rem;
+        color:#94a3b8;
+        font-size:11px;
+        padding:4px 8px;
+        width:100%;
+        outline:none;
+        transition:border-color .15s, color .15s;
+    }
+    .note-field:focus { border-color:#3b82f6; color:#e2e8f0; }
+    .note-field::placeholder { color:#334155; }
 </style>
 </head>
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 min-h-screen">
@@ -355,7 +390,7 @@ foreach ($items_arr as $it) {
         </div>
         <div class="flex gap-3">
             <button onclick="closeConfirm()" class="flex-1 border border-slate-700 hover:bg-slate-800 text-slate-300 py-2.5 rounded-xl text-sm font-medium transition">Cancel</button>
-            <button id="confirmOkBtn"        class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition">Confirm</button>
+            <button id="confirmOkBtn" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition">Confirm</button>
         </div>
     </div>
 </div>
@@ -388,7 +423,7 @@ foreach ($items_arr as $it) {
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V7a2 2 0 00-2-2h-3V3H9v2H6a2 2 0 00-2 2v6m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-4a2 2 0 00-2 2v1a2 2 0 01-2 2h0a2 2 0 01-2-2v-1a2 2 0 00-2-2H4"/></svg>
                 Suppliers
             </a>
-            <a href="purchase_order.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition <?= basename($_SERVER['PHP_SELF'])=='purchase_order.php'?'bg-blue-600/20 text-blue-200 font-medium':'text-slate-300 hover:bg-blue-600/20 hover:text-blue-200' ?>">
+            <a href="purchase_order.php" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition bg-blue-600/20 text-blue-200 font-medium">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
                 Purchase Orders
             </a>
@@ -442,7 +477,6 @@ foreach ($items_arr as $it) {
             </p>
         </div>
         <div class="flex items-center gap-3 flex-wrap">
-            <!-- Live clock -->
             <div class="hidden sm:flex items-center gap-2 text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
                 <span class="live-dot"></span>
                 <span id="liveTime" class="mono"></span>
@@ -474,9 +508,11 @@ foreach ($items_arr as $it) {
     </div>
     <?php endif; ?>
 
-    <!-- ══ CREATE PO PANEL ══ -->
+    <!-- ══════════════════════════════════════════════════════════
+         CREATE PO PANEL  (enhanced line items)
+    ══════════════════════════════════════════════════════════ -->
     <div id="createPanel" class="hidden mb-6 reveal reveal-2">
-        <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+        <div class="bg-slateate-900 bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
             <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center">
@@ -486,8 +522,11 @@ foreach ($items_arr as $it) {
                 </div>
                 <button onclick="closeCreatePanel()" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition text-xl leading-none">&times;</button>
             </div>
+
             <form method="post" id="createForm" class="p-6 space-y-5">
                 <input type="hidden" name="action" value="create_po">
+
+                <!-- Header fields -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs text-slate-400 uppercase tracking-wider mb-1.5">Supplier <span class="text-red-400">*</span></label>
@@ -512,7 +551,7 @@ foreach ($items_arr as $it) {
                     <textarea name="notes" rows="2" placeholder="Optional notes…" class="input-field text-sm resize-none"></textarea>
                 </div>
 
-                <!-- Line items -->
+                <!-- ── Line Items ── -->
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <label class="text-xs text-slate-400 uppercase tracking-wider font-medium">Line Items</label>
@@ -522,34 +561,67 @@ foreach ($items_arr as $it) {
                             Add Row
                         </button>
                     </div>
-                    <div class="hidden md:grid grid-cols-12 gap-3 mb-1.5 px-1 text-xs text-slate-500 font-medium uppercase tracking-wider">
-                        <div class="col-span-6">Item</div>
-                        <div class="col-span-3">Qty</div>
-                        <div class="col-span-3">Unit Cost</div>
+
+                    <!-- Column headers -->
+                    <div class="hidden md:grid grid-cols-12 gap-2 mb-1.5 px-1 text-xs text-slate-500 font-medium uppercase tracking-wider">
+                        <div class="col-span-4">Item</div>
+                        <div class="col-span-2">Qty</div>
+                        <div class="col-span-2">Unit Cost</div>
+                        <div class="col-span-1 text-center">Subtotal</div>
+                        <div class="col-span-2">Note</div>
+                        <div class="col-span-1"></div>
                     </div>
+
                     <div id="itemLines" class="space-y-2">
                         <?php for ($i = 0; $i < 3; $i++): ?>
-                        <div class="item-row grid grid-cols-12 gap-3 items-center" style="animation-delay:<?= $i * .06 ?>s">
-                            <div class="col-span-12 md:col-span-6">
-                                <select name="item_id[]" class="input-field text-sm"><?= $item_opts ?></select>
-                            </div>
-                            <div class="col-span-6 md:col-span-3">
-                                <input name="ordered_qty[]" type="number" step="0.01" min="0" placeholder="0.00" class="input-field text-sm mono">
-                            </div>
-                            <div class="col-span-5 md:col-span-2">
-                                <input name="unit_cost[]" type="number" step="0.0001" min="0" placeholder="0.0000" class="input-field text-sm mono">
-                            </div>
-                            <div class="col-span-1 flex justify-end">
-                                <button type="button" onclick="removeRow(this)" class="text-slate-600 hover:text-red-400 transition p-1.5 rounded-lg hover:bg-red-900/20">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
+                        <div class="item-row" style="animation-delay:<?= $i * .06 ?>s">
+                            <div class="grid grid-cols-12 gap-2 items-start">
+                                <!-- Item select -->
+                                <div class="col-span-12 md:col-span-4">
+                                    <select name="item_id[]" class="input-field text-sm item-select" onchange="onItemChange(this)">
+                                        <?= $item_opts ?>
+                                    </select>
+                                    <div class="last-cost-hint px-1 mt-1">— select item —</div>
+                                </div>
+                                <!-- Qty -->
+                                <div class="col-span-5 md:col-span-2">
+                                    <input name="ordered_qty[]" type="number" step="0.01" min="0" placeholder="0.00"
+                                        class="input-field text-sm mono qty-input" oninput="updateRowSubtotal(this)">
+                                </div>
+                                <!-- Unit cost -->
+                                <div class="col-span-5 md:col-span-2">
+                                    <input name="unit_cost[]" type="number" step="0.0001" min="0" placeholder="0.0000"
+                                        class="input-field text-sm mono cost-input" oninput="updateRowSubtotal(this)">
+                                </div>
+                                <!-- Subtotal chip -->
+                                <div class="col-span-2 md:col-span-1 flex items-center justify-center pt-1">
+                                    <span class="line-subtotal">₱0.00</span>
+                                </div>
+                                <!-- Note -->
+                                <div class="col-span-10 md:col-span-2 pt-1">
+                                    <input name="line_note[]" type="text" placeholder="Note…" class="note-field">
+                                </div>
+                                <!-- Remove -->
+                                <div class="col-span-2 md:col-span-1 flex items-center justify-end pt-1">
+                                    <button type="button" onclick="removeRow(this)"
+                                        class="text-slate-600 hover:text-red-400 transition p-1.5 rounded-lg hover:bg-red-900/20">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <?php endfor; ?>
                     </div>
-                    <!-- Line total preview -->
-                    <div id="lineTotalPreview" class="mt-3 px-1 flex justify-end">
-                        <span class="text-xs text-slate-500">Est. PO Total: <span id="estTotal" class="mono text-slate-300">₱0.00</span></span>
+
+                    <!-- Grand total -->
+                    <div class="mt-4 pt-4 border-t border-slate-800 flex items-center justify-between">
+                        <span class="text-xs text-slate-500">
+                            <span id="lineCount" class="mono text-slate-400">0</span> line item(s) with qty
+                        </span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-slate-500">Est. PO Total</span>
+                            <span id="estTotal" class="mono text-lg font-bold text-white">₱0.00</span>
+                        </div>
                     </div>
                 </div>
 
@@ -614,12 +686,14 @@ foreach ($items_arr as $it) {
             $can_cancel  = can_manage_po() && validate_po_transition($st, 'cancelled');
             $can_receipt = in_array($st, ['submitted', 'partial_received'], true);
 
-            // FIX: fetch line items directly here (no data_seek needed since each PO gets its own query)
+            // Line items with receipt progress
             $poi_items = $conn->query('
                 SELECT poi.po_item_id, i.item_name,
                        poi.ordered_qty, poi.received_qty,
                        (poi.ordered_qty - poi.received_qty) AS remaining,
-                       poi.unit_cost, poi.line_total
+                       poi.unit_cost, poi.line_total,
+                       poi.last_adjusted_unit_cost,
+                       poi.line_note
                 FROM purchase_order_items poi
                 JOIN items i ON i.item_id = poi.item_id
                 WHERE poi.po_id = ' . (int)$po['po_id']
@@ -643,34 +717,22 @@ foreach ($items_arr as $it) {
 
             <!-- ── Summary row ── -->
             <div class="grid grid-cols-12 gap-4 items-center px-5 py-4">
-
-                <!-- PO number (+ mobile supplier) -->
                 <div class="col-span-7 md:col-span-3">
                     <p class="mono text-sm font-medium text-blue-300"><?= htmlspecialchars($po['po_number']) ?></p>
                     <p class="md:hidden text-xs text-slate-400 mt-0.5 truncate"><?= htmlspecialchars($po['supplier_name']) ?></p>
                     <p class="text-xs text-slate-600 mt-0.5"><?= $created_fmt ?></p>
                 </div>
-
-                <!-- Supplier (desktop) -->
                 <div class="hidden md:block col-span-3 text-sm text-slate-300 truncate">
                     <?= htmlspecialchars($po['supplier_name']) ?>
                 </div>
-
-                <!-- Status badge (desktop) -->
                 <div class="hidden md:flex col-span-2 items-center">
                     <?= status_badge($st, $status_cfg) ?>
                 </div>
-
-                <!-- Total (desktop) -->
                 <div class="hidden md:block col-span-2">
                     <p class="mono text-sm text-white">₱<?= number_format((float)$po['po_total'], 2) ?></p>
                     <p class="text-xs text-slate-500"><?= $po['item_count'] ?> item<?= $po['item_count'] != 1 ? 's' : '' ?></p>
                 </div>
-
-                <!-- Actions -->
                 <div class="col-span-5 md:col-span-2 flex items-center justify-end gap-1.5 flex-wrap">
-
-                    <!-- Mobile status -->
                     <span class="md:hidden"><?= status_badge($st, $status_cfg) ?></span>
 
                     <?php if ($can_submit): ?>
@@ -698,7 +760,6 @@ foreach ($items_arr as $it) {
                     </button>
                     <?php endif; ?>
 
-                    <!-- Toggle details -->
                     <button onclick="toggleDetails(<?= $po['po_id'] ?>)"
                         class="text-slate-500 hover:text-slate-300 p-1.5 rounded-xl hover:bg-slate-800 transition" title="View line items">
                         <svg id="chev-<?= $po['po_id'] ?>" class="chevron w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
@@ -706,10 +767,13 @@ foreach ($items_arr as $it) {
                 </div>
             </div>
 
-            <!-- ── Details accordion ── -->
+            <!-- ══════════════════════════════════════════════════════
+                 DETAILS ACCORDION  — enhanced line items table
+            ══════════════════════════════════════════════════════ -->
             <div class="accordion-panel border-t border-slate-800/50" id="details-<?= $po['po_id'] ?>">
                 <div class="px-5 py-5">
                     <p class="text-xs text-slate-500 uppercase tracking-wider font-medium mb-3">Line Items</p>
+
                     <?php if ($poi_items && $poi_items->num_rows > 0): ?>
                     <div class="rounded-xl overflow-hidden border border-slate-800">
                         <table class="w-full text-sm">
@@ -718,28 +782,73 @@ foreach ($items_arr as $it) {
                                     <th class="text-left px-4 py-2.5">Item</th>
                                     <th class="text-right px-4 py-2.5">Ordered</th>
                                     <th class="text-right px-4 py-2.5">Received</th>
-                                    <th class="text-right px-4 py-2.5">Remaining</th>
+                                    <th class="text-left px-4 py-2.5 w-32">Progress</th>
+                                    <th class="text-center px-4 py-2.5">Status</th>
                                     <th class="text-right px-4 py-2.5">Unit Cost</th>
                                     <th class="text-right px-4 py-2.5">Line Total</th>
+                                    <th class="text-left px-4 py-2.5">Note</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800/60">
                             <?php while ($r = $poi_items->fetch_assoc()):
-                                $rem = (float)$r['remaining'];
-                                $rc  = $rem <= 0
-                                    ? 'text-emerald-400'
-                                    : ($rem < (float)$r['ordered_qty'] ? 'text-amber-400' : 'text-slate-300');
+                                $ord = (float)$r['ordered_qty'];
+                                $rec = (float)$r['received_qty'];
+                                $pct = $ord > 0 ? min(100, round($rec / $ord * 100)) : 0;
+
+                                // Progress bar colour
+                                if ($pct <= 0)       $bar_col = 'bg-slate-600';
+                                elseif ($pct < 100)  $bar_col = 'bg-amber-400';
+                                else                 $bar_col = 'bg-emerald-400';
+
+                                // Price change indicator
+                                $lac      = (float)($r['last_adjusted_unit_cost'] ?? 0);
+                                $uc       = (float)$r['unit_cost'];
+                                $price_hint = '';
+                                if ($lac > 0 && $lac != $uc) {
+                                    $diff = $lac - $uc;
+                                    $arrow = $diff > 0 ? '▲' : '▼';
+                                    $col   = $diff > 0 ? 'text-red-400' : 'text-emerald-400';
+                                    $price_hint = "<span class=\"{$col} text-xs ml-1\">{$arrow} ₱" . number_format(abs($diff), 4) . " adj</span>";
+                                }
                             ?>
                             <tr class="hover:bg-slate-800/30 transition">
-                                <td class="px-4 py-3 text-slate-200"><?= htmlspecialchars($r['item_name']) ?></td>
-                                <td class="px-4 py-3 text-right mono text-slate-300"><?= number_format($r['ordered_qty'],  2) ?></td>
-                                <td class="px-4 py-3 text-right mono text-slate-300"><?= number_format($r['received_qty'], 2) ?></td>
-                                <td class="px-4 py-3 text-right mono <?= $rc ?>"><?= number_format($rem, 2) ?></td>
-                                <td class="px-4 py-3 text-right mono text-slate-300">₱<?= number_format($r['unit_cost'],  4) ?></td>
-                                <td class="px-4 py-3 text-right mono text-slate-300">₱<?= number_format($r['line_total'], 2) ?></td>
+                                <td class="px-4 py-3 text-slate-200 font-medium">
+                                    <?= htmlspecialchars($r['item_name']) ?>
+                                </td>
+                                <td class="px-4 py-3 text-right mono text-slate-300"><?= number_format($ord, 2) ?></td>
+                                <td class="px-4 py-3 text-right mono text-slate-300"><?= number_format($rec, 2) ?></td>
+                                <!-- Progress bar -->
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <div class="recv-bar-track flex-1">
+                                            <div class="recv-bar-fill <?= $bar_col ?>" style="width:<?= $pct ?>%"></div>
+                                        </div>
+                                        <span class="mono text-xs text-slate-500 w-8 text-right"><?= $pct ?>%</span>
+                                    </div>
+                                </td>
+                                <!-- Line status badge -->
+                                <td class="px-4 py-3 text-center">
+                                    <?= line_status_badge($ord, $rec) ?>
+                                </td>
+                                <td class="px-4 py-3 text-right mono text-slate-300">
+                                    ₱<?= number_format($uc, 4) ?>
+                                    <?= $price_hint ?>
+                                </td>
+                                <td class="px-4 py-3 text-right mono text-slate-300">₱<?= number_format((float)$r['line_total'], 2) ?></td>
+                                <td class="px-4 py-3 text-slate-500 text-xs italic">
+                                    <?= $r['line_note'] ? htmlspecialchars($r['line_note']) : '—' ?>
+                                </td>
                             </tr>
                             <?php endwhile; ?>
                             </tbody>
+                            <!-- Grand total footer -->
+                            <tfoot class="bg-slate-800/40 border-t border-slate-700">
+                                <tr>
+                                    <td colspan="6" class="px-4 py-2.5 text-right text-xs text-slate-400 font-medium uppercase tracking-wider">PO Total</td>
+                                    <td class="px-4 py-2.5 text-right mono text-white font-bold">₱<?= number_format((float)$po['po_total'], 2) ?></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     <?php else: ?>
@@ -749,10 +858,10 @@ foreach ($items_arr as $it) {
                     <!-- Metadata row -->
                     <div class="mt-4 pt-4 border-t border-slate-800/60 grid grid-cols-2 md:grid-cols-4 gap-4">
                         <?php foreach ([
-                            ['Currency',  $po['currency'] ?? 'PHP'],
-                            ['Expected',  $po['expected_at'] ? date('M j, Y H:i', strtotime($po['expected_at'])) : '—'],
+                            ['Currency',   $po['currency'] ?? 'PHP'],
+                            ['Expected',   $po['expected_at'] ? date('M j, Y H:i', strtotime($po['expected_at'])) : '—'],
                             ['Ordered At', $po['ordered_at'] ? date('M j, Y H:i', strtotime($po['ordered_at'])) : '—'],
-                            ['Notes',     $po['notes'] ?: '—'],
+                            ['Notes',      $po['notes'] ?: '—'],
                         ] as [$lbl, $val]): ?>
                         <div>
                             <p class="text-xs text-slate-500 mb-0.5"><?= $lbl ?></p>
@@ -870,7 +979,6 @@ foreach ($items_arr as $it) {
         <?php endwhile; ?>
         </div><!-- /#poList -->
 
-        <!-- Empty state -->
         <?php if ($po_count === 0): ?>
         <div class="text-center py-16 text-slate-600">
             <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -882,12 +990,12 @@ foreach ($items_arr as $it) {
         <?php endif; ?>
 
         <p id="noResults" class="hidden text-center text-sm text-slate-600 py-12">No purchase orders match your search or filter.</p>
-    </div><!-- /.reveal -->
+    </div>
 
 </div>
 </div>
 
-<!-- Hidden action forms (submitted by confirm modal) -->
+<!-- Hidden action forms -->
 <form method="post" id="actionForm" class="hidden">
     <input type="hidden" name="action" id="actionFormAction">
     <input type="hidden" name="po_id"  id="actionFormPoId">
@@ -932,25 +1040,21 @@ function closeCreatePanel() {
     document.getElementById('createPanel').classList.add('hidden');
 }
 
-// ── Confirm modal (replaces browser confirm()) ─────────────────────────────
+// ── Confirm modal ──────────────────────────────────────────────────────────
 function showConfirm(type, poId, title, body, okLabel, okClass) {
     const icons = {
         submit: { bg:'bg-blue-900/30 border-blue-800/40', svg:'<svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' },
         cancel: { bg:'bg-red-900/30 border-red-800/40',   svg:'<svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' },
     };
     const ic = icons[type] || icons.submit;
-
     document.getElementById('confirmTitle').textContent  = title;
     document.getElementById('confirmBody').innerHTML     = body;
     document.getElementById('confirmOkBtn').textContent  = okLabel;
     document.getElementById('confirmOkBtn').className    = 'flex-1 py-2.5 rounded-xl text-sm font-semibold transition ' + okClass;
     document.getElementById('confirmIcon').className     = 'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border ' + ic.bg;
     document.getElementById('confirmIcon').innerHTML     = ic.svg;
-
-    // Re-trigger panel animation
     const panel = document.getElementById('confirmPanel');
     panel.style.animation = 'none'; panel.offsetHeight; panel.style.animation = '';
-
     document.getElementById('confirmOkBtn').onclick = () => {
         document.getElementById('actionFormAction').value = type === 'submit' ? 'submit_po' : 'cancel_po';
         document.getElementById('actionFormPoId').value   = poId;
@@ -958,7 +1062,6 @@ function showConfirm(type, poId, title, body, okLabel, okClass) {
         document.getElementById('loading').style.display = 'flex';
         document.getElementById('actionForm').submit();
     };
-
     const m = document.getElementById('confirmModal');
     m.classList.remove('hidden'); m.classList.add('flex');
 }
@@ -970,7 +1073,7 @@ document.getElementById('confirmModal').addEventListener('click', e => {
     if (e.target === document.getElementById('confirmModal')) closeConfirm();
 });
 
-// ── Details accordion (independent per PO) ─────────────────────────────────
+// ── Accordion toggles ──────────────────────────────────────────────────────
 function toggleDetails(id) {
     const panel = document.getElementById('details-' + id);
     const chev  = document.getElementById('chev-' + id);
@@ -978,10 +1081,8 @@ function toggleDetails(id) {
     panel.classList.toggle('open', !open);
     if (chev) chev.classList.toggle('open', !open);
 }
-
-// ── Receipt accordion (only one open at a time) ────────────────────────────
 function toggleReceipt(id) {
-    const panel  = document.getElementById('receipt-' + id);
+    const panel = document.getElementById('receipt-' + id);
     if (!panel) return;
     const wasOpen = panel.classList.contains('open');
     document.querySelectorAll('[id^="receipt-"]').forEach(p => p.classList.remove('open'));
@@ -994,7 +1095,6 @@ function toggleReceipt(id) {
 // ── Search + filter ────────────────────────────────────────────────────────
 let activeFilter = 'all';
 const searchEl   = document.getElementById('poSearch');
-
 document.querySelectorAll('.ftab').forEach(btn => {
     btn.addEventListener('click', function () {
         document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
@@ -1004,7 +1104,6 @@ document.querySelectorAll('.ftab').forEach(btn => {
     });
 });
 if (searchEl) searchEl.addEventListener('input', applyFilters);
-
 function applyFilters() {
     const q    = searchEl ? searchEl.value.toLowerCase().trim() : '';
     const rows = document.querySelectorAll('.po-card');
@@ -1018,49 +1117,140 @@ function applyFilters() {
     document.getElementById('noResults').classList.toggle('hidden', vis > 0);
 }
 
-// ── Dynamic item rows (Create PO) ──────────────────────────────────────────
-const itemOptions = <?= json_encode(array_map(fn($it) => ['id' => $it['item_id'], 'name' => $it['item_name']], $items_arr)) ?>;
+// ══════════════════════════════════════════════════════════════════════════
+// ENHANCED LINE ITEM LOGIC
+// ══════════════════════════════════════════════════════════════════════════
 
+// Item data from PHP (includes last_cost and current stock)
+const itemData = <?= json_encode(array_map(fn($it) => [
+    'id'        => (int)$it['item_id'],
+    'name'      => $it['item_name'],
+    'last_cost' => (float)($it['last_cost'] ?? 0),
+    'stock'     => (int)$it['stock'],
+], $items_arr)) ?>;
+
+const itemMap = {};
+itemData.forEach(o => { itemMap[o.id] = o; });
+
+// Build item <select> HTML once
 function makeItemSelect() {
-    let s = '<select name="item_id[]" class="input-field text-sm"><option value="">— Select item —</option>';
-    itemOptions.forEach(o => { s += `<option value="${o.id}">${o.name}</option>`; });
+    let s = '<select name="item_id[]" class="input-field text-sm item-select" onchange="onItemChange(this)">';
+    s += '<option value="">— Select item —</option>';
+    itemData.forEach(o => {
+        s += `<option value="${o.id}" data-last-cost="${o.last_cost}" data-stock="${o.stock}">${o.name}</option>`;
+    });
     return s + '</select>';
 }
 
-function removeRow(btn) {
-    btn.closest('.item-row').remove();
-    updateEstTotal();
+// When an item is selected: show last cost hint + auto-fill cost field
+function onItemChange(sel) {
+    const row  = sel.closest('.item-row');
+    const hint = row.querySelector('.last-cost-hint');
+    const cost = row.querySelector('.cost-input');
+    const opt  = sel.options[sel.selectedIndex];
+    const lc   = parseFloat(opt.dataset.lastCost || 0);
+    const stk  = parseInt(opt.dataset.stock || 0);
+
+    if (sel.value && lc > 0) {
+        hint.textContent = `Last cost: ₱${lc.toLocaleString('en-PH',{minimumFractionDigits:4,maximumFractionDigits:4})}  ·  Stock: ${stk}`;
+        hint.classList.add('has-cost');
+        // Auto-fill cost only if empty
+        if (cost && (!cost.value || parseFloat(cost.value) === 0)) {
+            cost.value = lc.toFixed(4);
+        }
+    } else if (sel.value) {
+        hint.textContent = `No purchase history  ·  Stock: ${stk}`;
+        hint.classList.remove('has-cost');
+    } else {
+        hint.textContent = '— select item —';
+        hint.classList.remove('has-cost');
+    }
+    updateRowSubtotal(sel);
 }
 
+// Recalculate a single row subtotal chip
+function updateRowSubtotal(el) {
+    const row   = el.closest('.item-row');
+    const qty   = parseFloat(row.querySelector('.qty-input')?.value  || 0);
+    const cost  = parseFloat(row.querySelector('.cost-input')?.value || 0);
+    const chip  = row.querySelector('.line-subtotal');
+    if (!chip) return;
+    const sub = qty * cost;
+    chip.textContent = '₱' + sub.toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+    chip.classList.toggle('has-value', sub > 0);
+    updateGrandTotal();
+}
+
+// Grand total + line count
+function updateGrandTotal() {
+    let total = 0, count = 0;
+    document.querySelectorAll('#itemLines .item-row').forEach(row => {
+        const qty  = parseFloat(row.querySelector('.qty-input')?.value  || 0);
+        const cost = parseFloat(row.querySelector('.cost-input')?.value || 0);
+        if (qty > 0) count++;
+        total += qty * cost;
+    });
+    document.getElementById('estTotal').textContent =
+        '₱' + total.toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('lineCount').textContent = count;
+}
+
+// Remove a row
+function removeRow(btn) {
+    btn.closest('.item-row').remove();
+    updateGrandTotal();
+}
+
+// Add a new row
 document.getElementById('addItemBtn').addEventListener('click', () => {
     const div = document.createElement('div');
-    div.className = 'item-row grid grid-cols-12 gap-3 items-center';
-    div.innerHTML =
-        `<div class="col-span-12 md:col-span-6">${makeItemSelect()}</div>` +
-        `<div class="col-span-6 md:col-span-3"><input name="ordered_qty[]" type="number" step="0.01" min="0" placeholder="0.00" class="input-field text-sm mono" oninput="updateEstTotal()"></div>` +
-        `<div class="col-span-5 md:col-span-2"><input name="unit_cost[]" type="number" step="0.0001" min="0" placeholder="0.0000" class="input-field text-sm mono" oninput="updateEstTotal()"></div>` +
-        `<div class="col-span-1 flex justify-end"><button type="button" onclick="removeRow(this)" class="text-slate-600 hover:text-red-400 transition p-1.5 rounded-lg hover:bg-red-900/20">` +
-        `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>`;
+    div.className = 'item-row';
+    div.innerHTML = `
+        <div class="grid grid-cols-12 gap-2 items-start">
+            <div class="col-span-12 md:col-span-4">
+                ${makeItemSelect()}
+                <div class="last-cost-hint px-1 mt-1">— select item —</div>
+            </div>
+            <div class="col-span-5 md:col-span-2">
+                <input name="ordered_qty[]" type="number" step="0.01" min="0" placeholder="0.00"
+                    class="input-field text-sm mono qty-input" oninput="updateRowSubtotal(this)">
+            </div>
+            <div class="col-span-5 md:col-span-2">
+                <input name="unit_cost[]" type="number" step="0.0001" min="0" placeholder="0.0000"
+                    class="input-field text-sm mono cost-input" oninput="updateRowSubtotal(this)">
+            </div>
+            <div class="col-span-2 md:col-span-1 flex items-center justify-center pt-1">
+                <span class="line-subtotal">₱0.00</span>
+            </div>
+            <div class="col-span-10 md:col-span-2 pt-1">
+                <input name="line_note[]" type="text" placeholder="Note…" class="note-field">
+            </div>
+            <div class="col-span-2 md:col-span-1 flex items-center justify-end pt-1">
+                <button type="button" onclick="removeRow(this)"
+                    class="text-slate-600 hover:text-red-400 transition p-1.5 rounded-lg hover:bg-red-900/20">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>`;
     document.getElementById('itemLines').appendChild(div);
 });
 
-// Attach live total to initial rows too
-document.getElementById('itemLines').addEventListener('input', updateEstTotal);
+// Delegate input events on existing rows
+document.getElementById('itemLines').addEventListener('input', e => {
+    if (e.target.classList.contains('qty-input') || e.target.classList.contains('cost-input')) {
+        updateRowSubtotal(e.target);
+    }
+});
 
-function updateEstTotal() {
-    const qtys  = document.querySelectorAll('#itemLines input[name="ordered_qty[]"]');
-    const costs = document.querySelectorAll('#itemLines input[name="unit_cost[]"]');
-    let total = 0;
-    qtys.forEach((q, i) => { total += (parseFloat(q.value) || 0) * (parseFloat(costs[i]?.value) || 0); });
-    document.getElementById('estTotal').textContent = '₱' + total.toLocaleString('en-PH', { minimumFractionDigits:2, maximumFractionDigits:2 });
-}
-
-// Escape key closes panels/modals
+// Escape
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeConfirm(); closeCreatePanel(); }
 });
 
+// Init grand total on load
+updateGrandTotal();
 </script>
 </body>
 </html>
- 

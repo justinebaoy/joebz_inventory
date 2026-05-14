@@ -91,7 +91,69 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         while ($row = $result->fetch_assoc()) {
             fputcsv($output, [$row['category_name'], $row['transactions'], $row['items_sold'], number_format($row['revenue'], 2)]);
         }
+    } elseif ($export_type === 'supplier_history') {
+        fputcsv($output, ['SUPPLIER ID', 'SUPPLIER NAME', 'CONTACT INFO', 'STATUS', 'TOTAL POs', 'TOTAL ORDERED (₱)', 'TOTAL RECEIVED (₱)', 'REGISTERED DATE']);
+        $result = $conn->query("
+            SELECT s.supplier_id, s.supplier_name,
+                   COALESCE(s.phone, s.email, 'N/A') AS contact_info,
+                   COALESCE(s.status, 'active') AS status,
+                   COUNT(DISTINCT po.po_id) AS total_pos,
+                   COALESCE(SUM(poi.line_total), 0) AS total_ordered,
+                   COALESCE(SUM(poi.received_qty * poi.unit_cost), 0) AS total_received,
+                   s.created_at
+            FROM suppliers s
+            LEFT JOIN purchase_orders po ON po.supplier_id = s.supplier_id
+            LEFT JOIN purchase_order_items poi ON poi.po_id = po.po_id
+            GROUP BY s.supplier_id, s.supplier_name, contact_info, s.status, s.created_at
+            ORDER BY total_ordered DESC
+        ");
+        while ($row = $result->fetch_assoc()) {
+            fputcsv($output, [
+                $row['supplier_id'],
+                $row['supplier_name'],
+                $row['contact_info'],
+                ucfirst($row['status']),
+                $row['total_pos'],
+                number_format($row['total_ordered'], 2),
+                number_format($row['total_received'], 2),
+                date('Y-m-d', strtotime($row['created_at'])),
+            ]);
+        }
+    } elseif ($export_type === 'po_history') {
+        fputcsv($output, ['PO NUMBER', 'CREATED DATE', 'SUPPLIER', 'STATUS', 'ITEM COUNT', 'PO TOTAL (₱)', 'CURRENCY', 'EXPECTED DELIVERY', 'ORDERED AT', 'NOTES']);
+        $stmt = $conn->prepare("
+            SELECT po.po_number, po.created_at, s.supplier_name, po.status,
+                   COUNT(poi.po_item_id) AS item_count,
+                   COALESCE(SUM(poi.line_total), 0) AS po_total,
+                   po.currency, po.expected_at, po.ordered_at, po.notes
+            FROM purchase_orders po
+            JOIN suppliers s ON s.supplier_id = po.supplier_id
+            LEFT JOIN purchase_order_items poi ON poi.po_id = po.po_id
+            WHERE DATE(po.created_at) BETWEEN ? AND ?
+            GROUP BY po.po_id, po.po_number, po.created_at, s.supplier_name,
+                     po.status, po.currency, po.expected_at, po.ordered_at, po.notes
+            ORDER BY po.created_at DESC
+        ");
+        $stmt->bind_param("ss", $start_date, $end_date);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            fputcsv($output, [
+                $row['po_number'],
+                date('Y-m-d H:i:s', strtotime($row['created_at'])),
+                $row['supplier_name'],
+                ucfirst(str_replace('_', ' ', $row['status'])),
+                $row['item_count'],
+                number_format($row['po_total'], 2),
+                $row['currency'] ?? 'PHP',
+                $row['expected_at'] ? date('Y-m-d H:i:s', strtotime($row['expected_at'])) : '—',
+                $row['ordered_at']  ? date('Y-m-d H:i:s', strtotime($row['ordered_at']))  : '—',
+                $row['notes'] ?? '—',
+            ]);
+        }
+        $stmt->close();
     }
+
     fclose($output);
     exit;
 }
@@ -250,16 +312,31 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
         .item-row { transition: background 0.15s ease; }
         .item-row:hover { background: rgba(255,255,255,0.03); }
 
-        .export-btn {
-            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-            height: 40px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            white-space: nowrap !important;
-            overflow: hidden;
+        /* Export grid — 3 cols × 4 rows to fit all 9 buttons */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 40px 40px 40px 40px;
+            gap: 12px;
+            align-items: stretch;
         }
-        .export-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .export-grid a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-decoration: none;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .export-grid a:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
 
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -467,15 +544,9 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
             <!-- Export Buttons -->
             <div class="lg:col-span-2 bg-slate-900 rounded-2xl border border-slate-800 p-5 self-start">
                 <h2 class="text-sm font-bold text-white mb-4" style="font-family:'Syne',sans-serif">Export to CSV</h2>
-                <!-- ═══ FIXED: grid-template-rows explicitly locks both rows to 40px;
-                     each <a> gets height/min-height/max-height + box-sizing to prevent
-                     content or browser defaults from stretching the first row taller. ═══ -->
-                <style>
-                    .export-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 40px 40px; gap: 12px; align-items: stretch; }
-                    .export-grid a { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 100%; box-sizing: border-box; border-radius: 12px; font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-decoration: none; transition: transform 0.18s ease, box-shadow 0.18s ease; }
-                    .export-grid a:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-                </style>
                 <div class="export-grid">
+
+                    <!-- Row 1 -->
                     <a href="?export=csv&export_type=sales&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7;">
                         <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg>
                         Sales Report
@@ -488,6 +559,8 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
                         <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         Customers
                     </a>
+
+                    <!-- Row 2 -->
                     <a href="?export=csv&export_type=lowstock&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);color:#fcd34d;">
                         <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                         Low Stock
@@ -500,10 +573,21 @@ $monthly_growth = $prev_month_sales > 0 ? (($current_month_sales - $prev_month_s
                         <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                         By Category
                     </a>
+
+                    <!-- Row 3 -->
                     <a href="?export=csv&export_type=discounts&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86efac;">
                         <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5 0h.01m4.99 5h.01M7 21h10a2 2 0 002-2V7a2 2 0 00-2-2h-2l-2-2h-2L9 5H7a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         Discounts
                     </a>
+                    <a href="?export=csv&export_type=supplier_history&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(14,165,233,0.1);border:1px solid rgba(14,165,233,0.2);color:#7dd3fc;">
+                        <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V7a2 2 0 00-2-2h-3V3H9v2H6a2 2 0 00-2 2v6m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-4a2 2 0 00-2 2v1a2 2 0 01-2 2h0a2 2 0 01-2-2v-1a2 2 0 00-2-2H4"/></svg>
+                        Suppliers
+                    </a>
+                    <a href="?export=csv&export_type=po_history&start_date=<?= urlencode($start_date) ?>&end_date=<?= urlencode($end_date) ?>" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);color:#d8b4fe;">
+                        <svg style="width:16px;height:16px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                        PO History
+                    </a>
+
                 </div>
                 <p class="text-xs text-slate-600 mt-4">Compatible with Excel, Google Sheets, and LibreOffice.</p>
             </div>
