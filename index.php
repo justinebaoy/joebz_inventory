@@ -81,10 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </form>
 
-            <p class="text-center text-sm text-slate-400 mt-6">
-                Don't have an account?
-                <a href="register.php" class="text-blue-400 hover:underline">Create Account</a>
-            </p>
         </div>
 
         <!-- Footer -->
